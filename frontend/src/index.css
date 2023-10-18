@@ -1,0 +1,26 @@
+:root {
+  --background-color: #222222;
+  --panel1-color: #333333;
+  --panel2-color: #444444;
+  --panel3-color: #555555;
+  --panel4-color: #aaaaaa;
+  --panel5-color: #eeeeee;
+  --text1-color: #ffffff;
+  --text2-color: #cccccc;
+  --text3-color: #111111;
+}
+
+body {
+  background-color: var(--background-color);
+  margin: 0;
+  padding: 0;
+  font-family: 'Oswald', sans-serif;
+}
+
+button {
+  font-family: 'Oswald', sans-serif;
+}
+
+input {
+  font-family: 'Oswald', sans-serif;
+}

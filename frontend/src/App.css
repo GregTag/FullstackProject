@@ -1,0 +1,45 @@
+.just-text {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--text1-color);
+  font-size: 2rem;
+  text-align: center;
+}
+
+.just-text:hover {
+  color: var(--text2-color);
+}
+
+.button {
+  padding: 10px 20px;
+  background-color: var(--panel2-color);
+  color: var(--text1-color);
+  font-size: 1rem;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: var(--panel3-color);
+  color: var(--text2-color);
+}
+
+.page {
+  position: relative;
+  min-height: 80vh;
+  margin: 0 10%;
+  padding: 1px 20px;
+  background-color: var(--panel2-color);
+  color: var(--text1-color);
+  box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.3);
+}
+
+@media screen and (max-width: 700px) {
+  .page {
+    margin: 0;
+  }
+}
