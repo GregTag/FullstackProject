@@ -1,15 +1,6 @@
-.row-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
 .item {
-    flex: 1;
+    margin: 10px;
     text-align: center;
-    margin: 1rem;
     background-color: var(--panel3-color);
 }
 
