@@ -8,17 +8,19 @@ import ProfilePage from './pages/Profile';
 import SearchPage from './pages/Search';
 import ErrorPage from './pages/Error';
 import AuthPage from './pages/Auth';
+import { loadMedia, loadProfile } from './logic/loaders';
+import { actionAuth, actionComment, actionSearch } from './logic/actions';
 
 const router = createBrowserRouter([
   {
     path: '/', element: <Root />, errorElement: <ErrorPage />, children: [
       { path: '/', element: <HomePage />, errorElement: <ErrorPage /> },
-      { path: '/media', element: <MediaPage />, errorElement: <ErrorPage /> },
-      { path: '/profile', element: <ProfilePage />, errorElement: <ErrorPage /> },
-      { path: '/search', element: <SearchPage />, errorElement: <ErrorPage /> }
+      { path: '/media/:name?', loader: loadMedia, action: actionComment, element: <MediaPage />, errorElement: <ErrorPage /> },
+      { path: '/profile/:name?', loader: loadProfile, element: <ProfilePage />, errorElement: <ErrorPage /> },
+      { path: '/search', loader: actionSearch, action: actionSearch, element: <SearchPage />, errorElement: <ErrorPage /> }
     ]
   },
-  { path: '/auth', element: <AuthPage />, errorElement: <ErrorPage /> },
+  { path: '/auth', action: actionAuth, element: <AuthPage />, errorElement: <AuthPage /> },
 
 ]);
 

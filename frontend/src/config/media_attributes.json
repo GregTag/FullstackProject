@@ -1,0 +1,67 @@
+[
+    {
+        "attribute": "category",
+        "type": "radio",
+        "values": [
+            "Serials",
+            "Movies",
+            "Books",
+            "Lectures"
+        ]
+    },
+    {
+        "attribute": "genre",
+        "type": "checkbox",
+        "values": [
+            "Action",
+            "Comedy",
+            "Drama",
+            "Horror",
+            "Thriller",
+            "Romance",
+            "Sci-Fi",
+            "Fantasy",
+            "Documentary",
+            "Animation",
+            "Adventure",
+            "Crime",
+            "Mystery",
+            "Family",
+            "Biography",
+            "History",
+            "Sport",
+            "Music",
+            "Musical",
+            "War",
+            "Western",
+            "Film-Noir"
+        ]
+    },
+    {
+        "attribute": "duration",
+        "type": "range",
+        "values": [
+            0,
+            100,
+            1
+        ]
+    },
+    {
+        "attribute": "rating",
+        "type": "range",
+        "values": [
+            0,
+            10,
+            0.1
+        ]
+    },
+    {
+        "attribute": "year",
+        "type": "range",
+        "values": [
+            1900,
+            2023,
+            1
+        ]
+    }
+]

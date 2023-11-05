@@ -4,7 +4,7 @@ import { selectIsLoggedIn, logout } from '../logic/user';
 import './Header.css';
 
 function Header() {
-    const isLoggedIn = useSelector(selectIsLoggedIn);
+    const is_logged = useSelector(selectIsLoggedIn);
     const dispatch = useDispatch();
     return (
         <header>
@@ -13,11 +13,11 @@ function Header() {
                 <input type="text" name='query' placeholder="Search..." />
                 <button type="submit" className='button'>Search</button>
             </Form>
-            {isLoggedIn ? (
+            {is_logged ? (
                 <div className='adaptive-flex'>
                     <Link to="/profile" className='button'>My Profile</Link>
                     <button onClick={() => dispatch(logout())} className='button'>
-                        <span class="material-symbols-outlined">logout</span>
+                        <span className="material-symbols-outlined">logout</span>
                     </button>
                 </div>
             ) : (

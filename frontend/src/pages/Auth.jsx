@@ -1,19 +1,10 @@
 import './Auth.css'
-import { login } from '../logic/user'
-import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Form, Link, useRouteError } from 'react-router-dom';
 import { useState } from 'react';
 
-function Login({ onRegister }) {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+function LoginForm({ onRegister }) {
     return (
-        <form onSubmit={(event) => {
-            event.preventDefault();
-            // const { username, password } = event.target.elements;
-            dispatch(login());
-            navigate('/profile');
-        }}>
+        <Form action='/auth' method='post'>
             <label htmlFor='username'>Username:</label>
             <input type='text' name='username' />
             <label htmlFor='password'>Password:</label>
@@ -22,25 +13,13 @@ function Login({ onRegister }) {
                 <button type='submit' className='button'>Login</button>
                 <button onClick={onRegister} className='button'>Register</button>
             </div>
-        </form >
+        </Form >
     )
 }
 
-function Register() {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+function RegisterForm({ onGoBack }) {
     return (
-        <form onSubmit={(event) => {
-            event.preventDefault();
-            const { password, repeated } = event.target.elements;
-            if (password.value !== repeated.value) {
-                alert('Passwords do not match!');
-                return;
-            }
-
-            dispatch(login());
-            navigate('/profile');
-        }}>
+        <Form action='/auth' method='post'>
             <label htmlFor='username'>Username:</label>
             <input type='text' name='username' />
             <label htmlFor='password'>Password:</label>
@@ -49,18 +28,24 @@ function Register() {
             <input type='password' name='repeated' />
             <div className='row-container'>
                 <button type='submit' className='button'>Register</button>
+                <button onClick={onGoBack} className='button'>Go Back</button>
             </div>
-        </form>
+        </Form>
     )
 }
 
 
 function AuthPage() {
+    const error = useRouteError();
+    if (error) {
+        console.error(error);
+    }
     const [registering, setRegistering] = useState(false);
     return (
         <div className='central-panel'>
             <Link to="/"><h1>Universal Media Organizer</h1></Link>
-            {registering ? <Register /> : <Login onRegister={() => setRegistering(true)} />}
+            {error && <div className='error'>Error!</div>}
+            {registering ? <RegisterForm onGoBack={() => setRegistering(false)} /> : <LoginForm onRegister={() => setRegistering(true)} />}
         </div>
     )
 }
