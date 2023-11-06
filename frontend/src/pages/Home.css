@@ -1,9 +1,0 @@
-.item {
-    margin: 10px;
-    text-align: center;
-    background-color: var(--panel3-color);
-}
-
-.item:hover {
-    background-color: var(--panel1-color);
-}

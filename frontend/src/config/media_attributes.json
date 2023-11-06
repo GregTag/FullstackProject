@@ -1,7 +1,5 @@
-[
-    {
-        "attribute": "category",
-        "type": "radio",
+{
+    "category": {
         "values": [
             "Serials",
             "Movies",
@@ -9,9 +7,7 @@
             "Lectures"
         ]
     },
-    {
-        "attribute": "genre",
-        "type": "checkbox",
+    "genres": {
         "values": [
             "Action",
             "Comedy",
@@ -37,31 +33,30 @@
             "Film-Noir"
         ]
     },
-    {
-        "attribute": "duration",
-        "type": "range",
-        "values": [
-            0,
-            100,
-            1
-        ]
+    "rating": {
+        "min": 0,
+        "max": 10,
+        "step": 0.1,
+        "name": "rating"
     },
-    {
-        "attribute": "rating",
-        "type": "range",
-        "values": [
-            0,
-            10,
-            0.1
-        ]
+    "duration": {
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "name": "duration"
     },
-    {
-        "attribute": "year",
-        "type": "range",
+    "year": {
+        "min": 1900,
+        "max": 2023,
+        "step": 1,
+        "name": "year"
+    },
+    "status": {
         "values": [
-            1900,
-            2023,
-            1
+            "planned",
+            "in_progress",
+            "completed",
+            "dropped"
         ]
     }
-]
+}

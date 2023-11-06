@@ -1,35 +1,45 @@
-import './Auth.css'
-import { Form, Link, useRouteError } from 'react-router-dom';
+import { Form, Link as RouterLink, useRouteError } from 'react-router-dom';
 import { useState } from 'react';
+import { Stack, Link, Card, FormControl, Input, Button, Typography, Alert, FormLabel } from '@mui/joy';
 
 function LoginForm({ onRegister }) {
     return (
-        <Form action='/auth' method='post'>
-            <label htmlFor='username'>Username:</label>
-            <input type='text' name='username' />
-            <label htmlFor='password'>Password:</label>
-            <input type='password' name='password' />
-            <div className='row-container'>
-                <button type='submit' className='button'>Login</button>
-                <button onClick={onRegister} className='button'>Register</button>
-            </div>
-        </Form >
+        <Form action='/auth' method='POST'>
+            <FormControl>
+                <FormLabel>Username:</FormLabel>
+                <Input type='text' name='username' />
+            </FormControl>
+            <FormControl>
+                <FormLabel>Password:</FormLabel>
+                <Input type='password' name='password' />
+            </FormControl>
+            <Stack direction="row" sx={{ justifyContent: "center", pt: 2 }} spacing={2}>
+                <Button size='lg' type='submit'>Login</Button>
+                <Button size='lg' onClick={onRegister}>Register</Button>
+            </Stack>
+        </Form>
     )
 }
 
 function RegisterForm({ onGoBack }) {
     return (
-        <Form action='/auth' method='post'>
-            <label htmlFor='username'>Username:</label>
-            <input type='text' name='username' />
-            <label htmlFor='password'>Password:</label>
-            <input type='password' name='password' />
-            <label htmlFor='repeated'>Repeat Password:</label>
-            <input type='password' name='repeated' />
-            <div className='row-container'>
-                <button type='submit' className='button'>Register</button>
-                <button onClick={onGoBack} className='button'>Go Back</button>
-            </div>
+        <Form action='/auth' method='POST'>
+            <FormControl>
+                <FormLabel htmlFor='username'>Username:</FormLabel>
+                <Input type='text' name='username' />
+            </FormControl>
+            <FormControl>
+                <FormLabel htmlFor='password'>Password:</FormLabel>
+                <Input type='password' name='password' />
+            </FormControl>
+            <FormControl>
+                <FormLabel htmlFor='repeated'>Repeat Password:</FormLabel>
+                <Input type='password' name='repeated' />
+            </FormControl>
+            <Stack direction="row" sx={{ justifyContent: "center", pt: 2 }} spacing={2}>
+                <Button size='lg' type='submit'>Register</Button>
+                <Button size='lg' onClick={onGoBack}>Go Back</Button>
+            </Stack>
         </Form>
     )
 }
@@ -42,11 +52,15 @@ function AuthPage() {
     }
     const [registering, setRegistering] = useState(false);
     return (
-        <div className='central-panel'>
-            <Link to="/"><h1>Universal Media Organizer</h1></Link>
-            {error && <div className='error'>Error!</div>}
-            {registering ? <RegisterForm onGoBack={() => setRegistering(false)} /> : <LoginForm onRegister={() => setRegistering(true)} />}
-        </div>
+        <Stack direction="column" sx={{ alignItems: "center", justifyContent: "center", height: "100vh" }}>
+            <Card sx={{ p: 4 }}>
+                <Link component={RouterLink} to="/" underline='none' sx={{ justifyContent: "center" }}>
+                    <Typography level="h2">Universal Media Organizer</Typography>
+                </Link>
+                {error && <Alert color="danger">Error!</Alert>}
+                {registering ? <RegisterForm onGoBack={() => setRegistering(false)} /> : <LoginForm onRegister={() => setRegistering(true)} />}
+            </Card>
+        </Stack>
     )
 }
 

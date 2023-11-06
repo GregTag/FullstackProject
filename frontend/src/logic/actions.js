@@ -1,7 +1,8 @@
 import config from '../config/config.json'
-import { login } from "./user";
+import { login } from "./slices/user";
 import { json, redirect } from "react-router-dom";
-import { dispatch } from "./store";
+import { dispatch } from "./slices/store";
+import { fetchSearchResults } from './slices/search';
 
 export async function actionAuth({ params, request }) {
     const data = await request.formData();
@@ -9,16 +10,12 @@ export async function actionAuth({ params, request }) {
     if (!data.get('password')) {
         return json({ error: 'Password is required' }, { status: 400 });
     }
-    // console.log(config.api_base_url);
+    console.log('Username', data.get('username'));
     const response = await fetch(`${config.api_base_url}/api/users/${data.get('username')}`);
     console.log('Response', response);
-    /// it does not work, cause await throws in case of error
-    // if (response.status !== 200) {
-    //     return response;
-    // }
     const user = await response.json();
     console.log('User', user);
-    console.log('Dispatch', dispatch(login({ username: user[0].login, avatar_url: user[0].avatar })));
+    console.log('Dispatch', dispatch(login(user[0])));
     return redirect('/profile');
 }
 
@@ -35,5 +32,6 @@ export async function actionComment({ params, request }) {
 }
 
 export async function actionSearch({ params, request }) {
-    return request;
+    dispatch(fetchSearchResults());
+    return {};
 }

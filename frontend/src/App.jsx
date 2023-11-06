@@ -1,5 +1,9 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import './App.css';
+import { CssVarsProvider, extendTheme } from '@mui/joy/styles';
+import { CssBaseline } from '@mui/joy';
+import { PersistGate } from 'redux-persist/integration/react'
+import store, { persistor } from './logic/slices/store';
+import { Provider } from 'react-redux';
 
 import Root from './common/Root';
 import HomePage from './pages/Home';
@@ -24,9 +28,23 @@ const router = createBrowserRouter([
 
 ]);
 
+const theme = extendTheme({
+  fontFamily: {
+    body: "'Oswald', sans-serif",
+    display: "'Oswald', sans-serif",
+  }
+});
+
 function App() {
   return (
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <CssVarsProvider defaultMode="dark" theme={theme} disableNestedContext>
+          <CssBaseline />
+          <RouterProvider router={router} />
+        </CssVarsProvider>
+      </PersistGate>
+    </Provider>
   );
 }
 
