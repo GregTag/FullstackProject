@@ -1,7 +1,8 @@
-import { Dropdown, MenuButton, Menu, MenuItem } from "@mui/joy";
-import { useDispatch, useSelector } from "react-redux";
-import { selectIsLoggedIn, selectStatus, setMedia, deleteMedia, mapStatus } from "../logic/slices/user";
-import mediaAttributes from "../config/media_attributes.json";
+import React from 'react';
+import { Dropdown, MenuButton, Menu, MenuItem } from '@mui/joy';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectIsLoggedIn, selectStatus, setMedia, deleteMedia, mapStatus } from '../logic/slices/user';
+import mediaAttributes from '../config/media_attributes.json';
 
 export default function StatusMenu({ media_id }) {
     const dispatch = useDispatch();
@@ -9,7 +10,7 @@ export default function StatusMenu({ media_id }) {
     const current_status = useSelector(selectStatus(media_id));
     const clickHandler = (value) => () => {
         dispatch(setMedia({ id: media_id, status: value }));
-    }
+    };
     return (
         <Dropdown>
             {is_logged && <MenuButton>{mapStatus(current_status)}</MenuButton>}
@@ -18,5 +19,5 @@ export default function StatusMenu({ media_id }) {
                 <MenuItem color="danger" selected={!current_status} onClick={() => dispatch(deleteMedia(media_id))}>Not tracked</MenuItem>
             </Menu>
         </Dropdown>
-    )
+    );
 }

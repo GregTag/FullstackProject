@@ -1,7 +1,8 @@
+import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { CssVarsProvider, extendTheme } from '@mui/joy/styles';
 import { CssBaseline } from '@mui/joy';
-import { PersistGate } from 'redux-persist/integration/react'
+import { PersistGate } from 'redux-persist/integration/react';
 import store, { persistor } from './logic/slices/store';
 import { Provider } from 'react-redux';
 
@@ -16,36 +17,39 @@ import { loadMedia, loadProfile } from './logic/loaders';
 import { actionAuth, actionComment, actionSearch } from './logic/actions';
 
 const router = createBrowserRouter([
-  {
-    path: '/', element: <Root />, errorElement: <ErrorPage />, children: [
-      { path: '/', element: <HomePage />, errorElement: <ErrorPage /> },
-      { path: '/media/:name?', loader: loadMedia, action: actionComment, element: <MediaPage />, errorElement: <ErrorPage /> },
-      { path: '/profile/:name?', loader: loadProfile, element: <ProfilePage />, errorElement: <ErrorPage /> },
-      { path: '/search', loader: actionSearch, action: actionSearch, element: <SearchPage />, errorElement: <ErrorPage /> }
-    ]
-  },
-  { path: '/auth', action: actionAuth, element: <AuthPage />, errorElement: <AuthPage /> },
+    {
+        path: '/',
+        element: <Root />,
+        errorElement: <ErrorPage />,
+        children: [
+            { path: '/', element: <HomePage />, errorElement: <ErrorPage /> },
+            { path: '/media/:name?', loader: loadMedia, action: actionComment, element: <MediaPage />, errorElement: <ErrorPage /> },
+            { path: '/profile/:name?', loader: loadProfile, element: <ProfilePage />, errorElement: <ErrorPage /> },
+            { path: '/search', loader: actionSearch, action: actionSearch, element: <SearchPage />, errorElement: <ErrorPage /> }
+        ]
+    },
+    { path: '/auth', action: actionAuth, element: <AuthPage />, errorElement: <AuthPage /> }
 
 ]);
 
 const theme = extendTheme({
-  fontFamily: {
-    body: "'Oswald', sans-serif",
-    display: "'Oswald', sans-serif",
-  }
+    fontFamily: {
+        body: '\'Oswald\', sans-serif',
+        display: '\'Oswald\', sans-serif'
+    }
 });
 
 function App() {
-  return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <CssVarsProvider defaultMode="dark" theme={theme} disableNestedContext>
-          <CssBaseline />
-          <RouterProvider router={router} />
-        </CssVarsProvider>
-      </PersistGate>
-    </Provider>
-  );
+    return (
+        <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+                <CssVarsProvider defaultMode="dark" theme={theme} disableNestedContext>
+                    <CssBaseline />
+                    <RouterProvider router={router} />
+                </CssVarsProvider>
+            </PersistGate>
+        </Provider>
+    );
 }
 
 export default App;

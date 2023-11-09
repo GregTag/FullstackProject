@@ -1,12 +1,13 @@
-import { Link as RouterLink, useRouteError } from "react-router-dom"
+import React from 'react';
+import { Link as RouterLink, useRouteError } from 'react-router-dom';
 import { Card, Typography, Stack, Link } from '@mui/joy';
 
 function ErrorPage() {
     const error = useRouteError();
-    console.log(error);
+    console.error(error);
 
     return (
-        <Stack direction="column" sx={{ alignItems: "center", justifyContent: "center", height: "100vh" }}>
+        <Stack direction="column" sx={{ alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
             <Card sx={{ p: 4, textAlign: 'center' }}>
                 <Typography level="h1">{error.status} {error.statusText}</Typography>
                 <Link component={RouterLink} to="/" overlay underline="none">
@@ -14,7 +15,7 @@ function ErrorPage() {
                 </Link>
             </Card>
         </Stack >
-    )
+    );
 }
 
 export default ErrorPage;

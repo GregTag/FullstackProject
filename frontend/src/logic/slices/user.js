@@ -1,32 +1,30 @@
-import { createSlice } from "@reduxjs/toolkit";
-// import config from '../../config/config.json';
+import { createSlice } from '@reduxjs/toolkit';
 
 const emptyUser = {
     login: null,
     fullname: null,
     avatar: null,
-    media: {}
-}
+    media: {},
+};
 
 const userSlice = createSlice({
-    name: "user",
+    name: 'user',
     initialState: {
         is_logged_in: false,
-        current_user: emptyUser
+        current_user: emptyUser,
     },
     reducers: {
         login: (state, action) => {
             state.is_logged_in = true;
             state.current_user = action.payload;
         },
-        logout: state => {
+        logout: (state) => {
             state.is_logged_in = false;
             state.current_user = emptyUser;
         },
         setMedia: (state, action) => {
             const media = action.payload;
             if (!state.is_logged_in) {
-                console.log('User not logged in');
                 return;
             }
             state.current_user.media[media.id] = media;
@@ -34,14 +32,13 @@ const userSlice = createSlice({
         deleteMedia: (state, action) => {
             const { media_id } = action.payload;
             if (!state.is_logged_in) {
-                console.log('User not logged in');
                 return;
             }
             if (media_id in state.current_user.media) {
                 delete state.current_user.media[media_id];
             }
-        }
-    }
+        },
+    },
 });
 
 export const setMedia = (media) => async (dispatch, getState) => {
@@ -49,9 +46,6 @@ export const setMedia = (media) => async (dispatch, getState) => {
     if (!user) {
         throw new Error('User not logged in');
     }
-
-    // const response = await fetch(`${config.api_base_url}/api/users/${user.login}/media/${media_id}/state`, /* options */);
-    // console.log('Set state response', response);
 
     dispatch(userSlice.actions.setMedia(media));
     return {};
@@ -63,31 +57,28 @@ export const deleteMedia = (media_id) => async (dispatch, getState) => {
         throw new Error('User not logged in');
     }
 
-    // const response = await fetch(`${config.api_base_url}/api/users/${user.login}/media/${media_id}/state`, /* options */);
-    // console.log('Set state response', response);
-
     dispatch(userSlice.actions.deleteMedia({ media_id }));
     return {};
-}
+};
 
-export const selectIsLoggedIn = state => state.user.is_logged_in;
-export const selectCurrentUser = state => state.user.current_user;
-export const selectStatus = (media_id) => state => state.user.current_user.media[media_id]?.status;
-export const selectRating = (media_id) => state => state.user.current_user.media[media_id]?.rating;
+export const selectIsLoggedIn = (state) => state.user.is_logged_in;
+export const selectCurrentUser = (state) => state.user.current_user;
+export const selectStatus = (media_id) => (state) => state.user.current_user.media[media_id]?.status;
+export const selectRating = (media_id) => (state) => state.user.current_user.media[media_id]?.rating;
 export const { login, logout } = userSlice.actions;
 export default userSlice.reducer;
 
 export function mapStatus(status) {
     switch (status) {
-        case "planned":
-            return "Planned";
-        case "in_progress":
-            return "In Progress";
-        case "completed":
-            return "Completed";
-        case "dropped":
-            return "Dropped";
-        default:
-            return "Not tracked"
+    case 'planned':
+        return 'Planned';
+    case 'in_progress':
+        return 'In Progress';
+    case 'completed':
+        return 'Completed';
+    case 'dropped':
+        return 'Dropped';
+    default:
+        return 'Not tracked';
     }
 }

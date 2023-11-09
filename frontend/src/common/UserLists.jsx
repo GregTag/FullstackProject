@@ -1,36 +1,36 @@
-import { Tabs, TabList, TabPanel, Tab } from "@mui/joy"
-import mediaAttributes from "../config/media_attributes.json";
-import TableWithSort from "./TableWithSort";
-import { useNavigate } from "react-router-dom";
-import { mapStatus } from "../logic/slices/user";
+import React from 'react';
+import { Tabs, TabList, TabPanel, Tab } from '@mui/joy';
+import mediaAttributes from '../config/media_attributes.json';
+import TableWithSort from './TableWithSort';
+import { useNavigate } from 'react-router-dom';
+import { mapStatus } from '../logic/slices/user';
 
 const categories = mediaAttributes.category.values;
 
 const head = [
     {
         id: 'title',
-        label: 'Title',
+        label: 'Title'
     },
     {
         id: 'status',
-        label: 'Status',
+        label: 'Status'
     },
     {
         id: 'rating',
-        label: 'Rating',
-    },
-]
+        label: 'Rating'
+    }
+];
 
 const options = [5, 10, 25, 50, 100];
 
 function MediaTable({ category, profile }) {
-    const rows = Object.entries(profile.media).filter(([_, val]) => val.category === category).map(([id, { status, ...other }]) => ({ id, status: mapStatus(status), ...other }));
-    console.log(rows);
+    const rows = Object.entries(profile.media).filter(([, val]) => val.category === category).map(([id, { status, ...other }]) => ({ id, status: mapStatus(status), ...other }));
     const navigate = useNavigate();
     const handler = (event, row) => navigate(`/media/${row.id}`);
     return (
         <TableWithSort head={head} rowsPerPageOptions={options} rows={rows} handleClick={handler} />
-    )
+    );
 }
 
 function UserLists({ profile }) {
@@ -52,7 +52,7 @@ function UserLists({ profile }) {
                 </TabPanel>
             ))}
         </Tabs>
-    )
+    );
 }
 
-export default UserLists
+export default UserLists;

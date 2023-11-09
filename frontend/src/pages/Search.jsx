@@ -1,16 +1,17 @@
-import { Link as RouterLink } from "react-router-dom";
-import { selectResults } from "../logic/slices/search";
-import { useSelector } from "react-redux";
-import { Sheet, Stack, Typography, Grid, Card, CardOverflow, AspectRatio, Link } from "@mui/joy";
-import FilterComponent from "../common/Filters";
+import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { selectResults } from '../logic/slices/search';
+import { useSelector } from 'react-redux';
+import { Sheet, Stack, Typography, Grid, Card, CardOverflow, AspectRatio, Link } from '@mui/joy';
+import FilterComponent from '../common/Filters';
 
 function SidePanel() {
     return (
-        <Sheet variant="soft" sx={{ minWidth: { sm: "100vw", md: 300 }, maxWidth: { sm: "100vw", md: 300 } }} >
-            <Typography level="h3" sx={{ textAlign: "center" }}>Filters</Typography>
+        <Sheet variant="soft" sx={{ minWidth: { sm: '100vw', md: 300 }, maxWidth: { sm: '100vw', md: 300 } }} >
+            <Typography level="h3" sx={{ textAlign: 'center' }}>Filters</Typography>
             <FilterComponent />
         </ Sheet>
-    )
+    );
 }
 
 function Result({ result }) {
@@ -27,20 +28,19 @@ function Result({ result }) {
                 </Link>
             </Card>
         </Grid >
-    )
+    );
 }
 
 function MainGrid() {
     const results = useSelector(selectResults);
     return (<Grid container sx={{ flexGrow: 1 }}>
         {results.map((result) => (<Result key={result.id} result={result} />))}
-    </Grid>)
+    </Grid>);
 }
 
 function SearchPage() {
-
     return (
-        <Stack direction={{ sm: "column", md: "row" }} sx={{ flexGrow: 1 }}>
+        <Stack direction={{ sm: 'column', md: 'row' }} sx={{ flexGrow: 1 }}>
             <SidePanel />
             <MainGrid />
         </Stack>

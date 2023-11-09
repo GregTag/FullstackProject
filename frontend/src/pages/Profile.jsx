@@ -1,14 +1,14 @@
-import { useLoaderData } from "react-router-dom";
-import { Sheet, Stack, AspectRatio, Typography, Box, Divider } from "@mui/joy";
-import UserLists from "../common/UserLists";
+import React from 'react';
+import { useLoaderData } from 'react-router-dom';
+import { Sheet, Stack, AspectRatio, Typography, Box, Divider } from '@mui/joy';
+import UserLists from '../common/UserLists';
 
 function ProfilePage() {
     const profile = useLoaderData();
-    console.log("Profile", profile);
     return (
-        <Sheet sx={{ mx: { sm: 0, md: 25 }, p: "20px" }}>
+        <Sheet sx={{ mx: { sm: 0, md: 25 }, p: '20px' }}>
             <Stack spacing={2}>
-                <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <Box sx={{ flexBasis: 300 }}>
                         <AspectRatio ratio={1 / 1} >
                             <img src={profile.avatar} alt={profile.login} />

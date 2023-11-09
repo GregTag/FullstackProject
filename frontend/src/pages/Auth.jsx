@@ -1,5 +1,5 @@
+import React, { useState } from 'react';
 import { Form, Link as RouterLink, useRouteError } from 'react-router-dom';
-import { useState } from 'react';
 import { Stack, Link, Card, FormControl, Input, Button, Typography, Alert, FormLabel } from '@mui/joy';
 
 function LoginForm({ onRegister }) {
@@ -13,12 +13,12 @@ function LoginForm({ onRegister }) {
                 <FormLabel>Password:</FormLabel>
                 <Input type='password' name='password' />
             </FormControl>
-            <Stack direction="row" sx={{ justifyContent: "center", pt: 2 }} spacing={2}>
+            <Stack direction="row" sx={{ justifyContent: 'center', pt: 2 }} spacing={2}>
                 <Button size='lg' type='submit'>Login</Button>
                 <Button size='lg' onClick={onRegister}>Register</Button>
             </Stack>
         </Form>
-    )
+    );
 }
 
 function RegisterForm({ onGoBack }) {
@@ -36,14 +36,13 @@ function RegisterForm({ onGoBack }) {
                 <FormLabel htmlFor='repeated'>Repeat Password:</FormLabel>
                 <Input type='password' name='repeated' />
             </FormControl>
-            <Stack direction="row" sx={{ justifyContent: "center", pt: 2 }} spacing={2}>
+            <Stack direction="row" sx={{ justifyContent: 'center', pt: 2 }} spacing={2}>
                 <Button size='lg' type='submit'>Register</Button>
                 <Button size='lg' onClick={onGoBack}>Go Back</Button>
             </Stack>
         </Form>
-    )
+    );
 }
-
 
 function AuthPage() {
     const error = useRouteError();
@@ -52,16 +51,16 @@ function AuthPage() {
     }
     const [registering, setRegistering] = useState(false);
     return (
-        <Stack direction="column" sx={{ alignItems: "center", justifyContent: "center", height: "100vh" }}>
+        <Stack direction="column" sx={{ alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
             <Card sx={{ p: 4 }}>
-                <Link component={RouterLink} to="/" underline='none' sx={{ justifyContent: "center" }}>
+                <Link component={RouterLink} to="/" underline='none' sx={{ justifyContent: 'center' }}>
                     <Typography level="h2">Universal Media Organizer</Typography>
                 </Link>
                 {error && <Alert color="danger">Error!</Alert>}
                 {registering ? <RegisterForm onGoBack={() => setRegistering(false)} /> : <LoginForm onRegister={() => setRegistering(true)} />}
             </Card>
         </Stack>
-    )
+    );
 }
 
 export default AuthPage;

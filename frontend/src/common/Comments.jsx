@@ -1,9 +1,9 @@
-import { Await, Form, Link as RouterLink } from "react-router-dom";
-import { loadComments } from "../logic/loaders";
-import React from "react";
-import { useSelector } from "react-redux";
-import { selectIsLoggedIn } from "../logic/slices/user";
-import { Typography, Button, Stack, Textarea, Card, CardOverflow, Avatar } from "@mui/joy";
+import React from 'react';
+import { Await, Form, Link as RouterLink } from 'react-router-dom';
+import { loadComments } from '../logic/loaders';
+import { useSelector } from 'react-redux';
+import { selectIsLoggedIn } from '../logic/slices/user';
+import { Typography, Button, Stack, Textarea, Card, CardOverflow, Avatar } from '@mui/joy';
 
 function CommentForm() {
     return (
@@ -13,7 +13,7 @@ function CommentForm() {
                 <Button size="lg" variant="soft" type="submit">Send</Button>
             </Stack>
         </Form>
-    )
+    );
 }
 
 function Comment({ comment }) {
@@ -25,7 +25,7 @@ function Comment({ comment }) {
                 <Typography level="body-md">{comment.content}</Typography>
             </Stack>
         </Card>
-    )
+    );
 }
 
 function Comments({ media }) {
@@ -43,7 +43,7 @@ function Comments({ media }) {
             </Await>
         </React.Suspense>
         {is_logged && <CardOverflow color="primary" variant="solid"><CommentForm /></CardOverflow>}
-    </Card>)
+    </Card>);
 }
 
 export default Comments;

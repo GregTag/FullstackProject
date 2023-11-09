@@ -1,14 +1,13 @@
-import { Typography } from "@mui/joy";
+import React, { useState } from 'react';
+import { Typography, Card, Stack, Link } from '@mui/joy';
 import { Star, StarBorder } from '@mui/icons-material';
-import { Card, Stack, Link } from "@mui/joy";
-import { useDispatch, useSelector } from "react-redux";
-import { selectRating, setMedia } from "../logic/slices/user";
-import { useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { selectRating, setMedia } from '../logic/slices/user';
 
 function StarWithAction({ index, setSelect, select, rating, onClick }) {
-    return (<Link underline="none" color={index <= select ? "warning" : "neutral"} component="button" onClick={onClick} onMouseEnter={() => setSelect(index)}>
+    return (<Link underline="none" color={index <= select ? 'warning' : 'neutral'} component="button" onClick={onClick} onMouseEnter={() => setSelect(index)}>
         {index <= rating ? <Star /> : <StarBorder />}
-    </Link>)
+    </Link>);
 }
 
 function UserRate({ rating, media_id }) {
@@ -17,10 +16,10 @@ function UserRate({ rating, media_id }) {
     const clickHandler = (index) => () => dispatch(setMedia({ id: media_id, rating: index }));
     return (<Stack direction="row">
         {Array(10).fill().map((_, index) => <StarWithAction key={index} index={index + 1} select={select} setSelect={setSelect} rating={rating} onClick={clickHandler(index + 1)} />)}
-    </Stack>)
+    </Stack>);
 }
 
-const colors = ["danger", "warning", "success"];
+const colors = ['danger', 'warning', 'success'];
 function ratingToColor(rating) {
     if (rating < 5) return colors[0];
     if (rating < 8) return colors[1];
@@ -29,14 +28,13 @@ function ratingToColor(rating) {
 
 function Rating({ rating, media_id }) {
     const user_rating = useSelector(selectRating(media_id));
-    console.log('User rating', user_rating);
     return (<Card>
         <Stack direction="row" spacing={2}>
             <Typography color={ratingToColor(rating)}>Total rating: {rating}</Typography>
             {user_rating != null && <Typography color={ratingToColor(user_rating)}>Your rating: {user_rating}</Typography>}
         </Stack>
         {user_rating != null && <UserRate rating={user_rating} media_id={media_id} />}
-    </Card>)
+    </Card>);
 }
 
 export default Rating;

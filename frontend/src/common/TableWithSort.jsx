@@ -1,9 +1,9 @@
+import React, { useState } from 'react';
 import { Box, Table, Typography, FormControl, FormLabel, IconButton, Link, Select, Option } from '@mui/joy';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { visuallyHidden } from '@mui/utils';
-import { useState } from 'react';
 
 function labelDisplayedRows({ from, to, count }) {
     return `${from}–${to} of ${count !== -1 ? count : `more than ${to}`}`;
@@ -42,7 +42,6 @@ function EnhancedTableHead({ order, orderBy, onRequestSort, head }) {
                                 active ? { asc: 'ascending', desc: 'descending' }[order] : undefined
                             }
                         >
-                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                             <Link
                                 underline="none"
                                 color="neutral"
@@ -57,17 +56,19 @@ function EnhancedTableHead({ order, orderBy, onRequestSort, head }) {
                                     '& svg': {
                                         transition: '0.2s',
                                         transform:
-                                            active && order === 'desc' ? 'rotate(0deg)' : 'rotate(180deg)',
+                                            active && order === 'desc' ? 'rotate(0deg)' : 'rotate(180deg)'
                                     },
-                                    '&:hover': { '& svg': { opacity: 1 } },
+                                    '&:hover': { '& svg': { opacity: 1 } }
                                 }}
                             >
                                 {headCell.label}
-                                {active ? (
-                                    <Box component="span" sx={visuallyHidden}>
-                                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                    </Box>
-                                ) : null}
+                                {active
+                                    ? (
+                                        <Box component="span" sx={visuallyHidden}>
+                                            {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                        </Box>
+                                    )
+                                    : null}
                             </Link>
                         </th>
                     );
@@ -120,7 +121,7 @@ export default function TableWithSort({ head, rows, rowsPerPageOptions, handleCl
                 '--TableCell-selectedBackground': (theme) =>
                     theme.vars.palette.success.softBg,
                 '& thead th': {
-                    width: `calc(100% / ${head.length})`,
+                    width: `calc(100% / ${head.length})`
                 }
             }}
         >
@@ -147,7 +148,7 @@ export default function TableWithSort({ head, rows, rowsPerPageOptions, handleCl
                     <tr
                         style={{
                             height: `calc(${emptyRows} * 40px)`,
-                            '--TableRow-hoverBackground': 'transparent',
+                            '--TableRow-hoverBackground': 'transparent'
                         }}
                     >
                         <td colSpan={6} aria-hidden />
@@ -162,7 +163,7 @@ export default function TableWithSort({ head, rows, rowsPerPageOptions, handleCl
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: 2,
-                                justifyContent: 'flex-end',
+                                justifyContent: 'flex-end'
                             }}
                         >
                             <FormControl orientation="horizontal" size="sm">
@@ -176,7 +177,7 @@ export default function TableWithSort({ head, rows, rowsPerPageOptions, handleCl
                                 {labelDisplayedRows({
                                     from: rows.length === 0 ? 0 : page * rowsPerPage + 1,
                                     to: getLabelDisplayedRowsTo(),
-                                    count: rows.length === -1 ? -1 : rows.length,
+                                    count: rows.length === -1 ? -1 : rows.length
                                 })}
                             </Typography>
                             <Box sx={{ display: 'flex', gap: 1 }}>
