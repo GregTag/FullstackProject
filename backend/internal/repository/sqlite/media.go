@@ -56,16 +56,16 @@ func (r *MediaSQLite) Get(id uint) (*entity.Media, error) {
 }
 
 func (r *MediaSQLite) Load(id uint) (*entity.MediaView, error) {
-	var view entity.MediaView
-
-	result := r.db.Table("media_view").Where("id = ?", id).Take(&view)
-	if result.Error == nil {
-		return &view, nil
-	} else if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		return &view, entity.ErrUserNotFound
-	} else {
-		return &view, result.Error
+	media, err := r.Get(id)
+	if err != nil {
+		return nil, err
 	}
+	comments, err := NewCommentSQLite(r.db).LoadAll(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &entity.MediaView{Media: *media, Comments: *comments}, nil
 }
 
 func (r *MediaSQLite) Search(filter *entity.Filter) (*[]entity.MediaResult, error) {
@@ -101,7 +101,7 @@ func (r *MediaSQLite) Search(filter *entity.Filter) (*[]entity.MediaResult, erro
 		query = query.Where("cumulative_rating <= number_of_votes * ?", filter.RatingTo)
 	}
 
-	err := query.Scan(&results).Error
+	err := query.Select("id, title, image, cumulative_rating / number_of_votes AS rating").Scan(&results).Error
 	if err != nil {
 		return nil, err
 	}

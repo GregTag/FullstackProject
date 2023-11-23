@@ -2,26 +2,36 @@ package entity
 
 import "time"
 
-type Comment struct {
+type CommentBase struct {
 	ID        uint `gorm:"primaryKey"`
-	MediaID   uint
+	MediaID   uint `gorm:"index:"`
 	SenderID  uint
 	Content   string
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
 
+type Comment struct {
+	CommentBase
+	Sender User `gorm:"references:SenderID"`
+}
+
 type CommentView struct {
-	Comment
-	SenderLogin    string
-	SenderAvatar   string
-	SenderFullname string
+	CommentBase
+	Sender UserView
 }
 
 type CommentRepository interface {
-	Create(*Comment) error
-	Update(*Comment) error
+	Create(*CommentBase) error
+	Update(*CommentBase) error
 	Delete(id uint) error
-	Get(id uint) (*Comment, error)
+	Load(id uint) (*CommentView, error)
+	LoadAll(media_id uint) (*[]CommentView, error)
+}
+
+type CommentService interface {
+	Add(*CommentBase) error
+	Edit(*CommentBase) error
+	Delete(id uint) error
 	LoadAll(media_id uint) (*[]CommentView, error)
 }

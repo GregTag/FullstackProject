@@ -18,7 +18,7 @@ type Media struct {
 
 type MediaView struct {
 	Media
-	Comments []CommentView `gorm:"foreignKey:MediaID"`
+	Comments []CommentView
 }
 
 type MediaResult struct {
@@ -45,6 +45,14 @@ type MediaRepository interface {
 	Update(*Media) error
 	Delete(id uint) error
 	Get(id uint) (*Media, error)
+	Load(id uint) (*MediaView, error)
+	Search(*Filter) (*[]MediaResult, error)
+}
+
+type MediaService interface {
+	Add(*Media) error
+	Edit(*Media) error
+	Delete(id uint) error
 	Load(id uint) (*MediaView, error)
 	Search(*Filter) (*[]MediaResult, error)
 }

@@ -1,5 +1,9 @@
 # Backend
 
+## API Documentation
+[Swagger API](./docs/api.yaml)
+
+
 ## Diagrams
 
 ### Entity Relationship Diagram

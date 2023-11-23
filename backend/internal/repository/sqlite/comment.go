@@ -15,8 +15,9 @@ func NewCommentSQLite(db *gorm.DB) *CommentSQLite {
 	return &CommentSQLite{db: db}
 }
 
-func (r *CommentSQLite) Create(comment *entity.Comment) error {
-	result := r.db.Create(comment)
+func (r *CommentSQLite) Create(comment *entity.CommentBase) error {
+
+	result := r.db.Model(&entity.Comment{}).Create(comment)
 	if result.Error != nil {
 		return result.Error
 	} else {
@@ -24,8 +25,8 @@ func (r *CommentSQLite) Create(comment *entity.Comment) error {
 	}
 }
 
-func (r *CommentSQLite) Update(comment *entity.Comment) error {
-	result := r.db.Model(comment).Updates(comment)
+func (r *CommentSQLite) Update(comment *entity.CommentBase) error {
+	result := r.db.Model(&entity.Comment{}).Updates(comment)
 	if result.Error != nil {
 		return result.Error
 	} else {
@@ -42,10 +43,10 @@ func (r *CommentSQLite) Delete(id uint) error {
 	}
 }
 
-func (r *CommentSQLite) Get(id uint) (*entity.Comment, error) {
-	var comment entity.Comment
+func (r *CommentSQLite) Load(id uint) (*entity.CommentView, error) {
+	var comment entity.CommentView
 
-	result := r.db.First(&comment, id)
+	result := r.db.Model(&entity.Comment{}).First(&comment, id)
 	if result.Error == nil {
 		return &comment, nil
 	} else if errors.Is(result.Error, gorm.ErrRecordNotFound) {
@@ -58,7 +59,7 @@ func (r *CommentSQLite) Get(id uint) (*entity.Comment, error) {
 func (r *CommentSQLite) LoadAll(media_id uint) (*[]entity.CommentView, error) {
 	var comments []entity.CommentView
 
-	result := r.db.Table("comment_view").Where("media_id = ?", media_id).Find(&comments)
+	result := r.db.Model(&entity.Comment{}).Where("media_id = ?", media_id).Find(&comments)
 	if result.Error != nil {
 		return nil, result.Error
 	} else {

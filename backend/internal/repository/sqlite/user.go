@@ -58,12 +58,33 @@ func (r *UserSQLite) Get(id uint) (*entity.User, error) {
 func (r *UserSQLite) GetByLogin(login string) (*entity.User, error) {
 	var user entity.User
 
-	result := r.db.Where("login = ?", login).First(&user)
+	result := r.db.Model(&entity.User{}).Where("login = ?", login).First(&user)
 	if result.Error == nil {
 		return &user, nil
 	} else if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		return &user, entity.ErrUserNotFound
+		return nil, entity.ErrUserNotFound
 	} else {
-		return &user, result.Error
+		return nil, result.Error
 	}
+}
+
+func (r *UserSQLite) GetViewByLogin(login string) (*entity.UserView, error) {
+	var user entity.UserView
+
+	result := r.db.Model(&entity.User{}).Where("login = ?", login).First(&user)
+	if result.Error == nil {
+		return &user, nil
+	} else if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return nil, entity.ErrUserNotFound
+	} else {
+		return nil, result.Error
+	}
+}
+
+func (r *UserSQLite) FillTracks(view *entity.UserView) (*entity.UserInfo, error) {
+	tracks, err := NewMediaTrackSQLite(r.db).LoadAll(view.ID)
+	if err != nil {
+		return nil, err
+	}
+	return &entity.UserInfo{User: *view, Tracks: *tracks}, nil
 }

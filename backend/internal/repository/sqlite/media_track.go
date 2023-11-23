@@ -16,36 +16,79 @@ func NewMediaTrackSQLite(db *gorm.DB) *MediaTrackSQLite {
 }
 
 func (r *MediaTrackSQLite) Create(track *entity.MediaTrack) error {
-	result := r.db.Create(track)
-	if result.Error != nil {
-		return result.Error
-	} else {
-		return nil
-	}
+	err := r.db.Transaction(func(tx *gorm.DB) error {
+		err := tx.Create(track).Error
+		if err != nil {
+			return err
+		}
+
+		if track.Rating != 0 {
+			track.Media.CumulativeRating += uint64(track.Rating)
+			track.Media.NumberOfRatings += 1
+		}
+		track.Media.NumberOfTracks += 1
+
+		err = tx.Model(track.Media).Updates(track.Media).Error
+		return err
+	})
+	return err
+
 }
 
 func (r *MediaTrackSQLite) Update(track *entity.MediaTrack) error {
-	result := r.db.Model(track).Updates(track)
-	if result.Error != nil {
-		return result.Error
-	} else {
-		return nil
-	}
+	err := r.db.Transaction(func(tx *gorm.DB) error {
+		var rating uint8
+		err := tx.Model(&entity.MediaTrack{}).Select("rating").Where("user_id = ? AND media_id = ?", track.UserID, track.MediaID).Row().Scan(rating)
+		if err != nil {
+			return err
+		}
+		err = tx.Model(track).Updates(track).Error
+		if err != nil {
+			return err
+		}
+
+		track.Media.CumulativeRating += uint64(track.Rating - rating)
+		if rating == 0 {
+			track.Media.NumberOfRatings += 1
+		}
+		if track.Rating == 0 {
+			track.Media.NumberOfRatings -= 1
+		}
+
+		err = tx.Model(track.Media).Updates(track.Media).Error
+		return err
+	})
+	return err
 }
 
 func (r *MediaTrackSQLite) Delete(user_id uint, media_id uint) error {
-	result := r.db.Delete(&entity.MediaTrack{}, user_id, media_id)
-	if result.Error != nil {
-		return result.Error
-	} else {
-		return nil
-	}
+	err := r.db.Transaction(func(tx *gorm.DB) error {
+		track, err := r.Get(user_id, media_id)
+		if err != nil {
+			return err
+		}
+
+		if track.Rating != 0 {
+			track.Media.CumulativeRating -= uint64(track.Rating)
+			track.Media.NumberOfRatings -= 1
+		}
+		track.Media.NumberOfTracks -= 1
+
+		err = tx.Model(track.Media).Updates(track.Media).Error
+		if err != nil {
+			return err
+		}
+
+		err = tx.Delete(track).Error
+		return err
+	})
+	return err
 }
 
 func (r *MediaTrackSQLite) Get(user_id uint, media_id uint) (*entity.MediaTrack, error) {
 	var track entity.MediaTrack
 
-	result := r.db.First(&track, user_id, media_id)
+	result := r.db.Where("user_id = ? AND media_id = ?", user_id, media_id).First(&track)
 	if result.Error == nil {
 		return &track, nil
 	} else if errors.Is(result.Error, gorm.ErrRecordNotFound) {
@@ -58,7 +101,7 @@ func (r *MediaTrackSQLite) Get(user_id uint, media_id uint) (*entity.MediaTrack,
 func (r *MediaTrackSQLite) LoadAll(user_id uint) (*[]entity.MediaTrackView, error) {
 	var tracks []entity.MediaTrackView
 
-	result := r.db.Table("media_track_view").Where("user_id = ?", user_id).Find(&tracks)
+	result := r.db.Table("media_track").Select("media_track.*, media.title as media_title").Joins("JOIN media ON media_track.media_id = media.id").Where("media_track.user_id = ?", user_id).Scan(&tracks)
 	if result.Error != nil {
 		return nil, result.Error
 	} else {
