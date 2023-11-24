@@ -29,7 +29,7 @@ func (h *Handler) commentAdd(w http.ResponseWriter, r *http.Request) {
 	comment.MediaID = uint(media_id)
 	comment.Content = data["content"]
 
-	// err = h.commentService.Add(&comment)
+	// view, err = h.commentService.Add(&comment)
 	// if err != nil {
 	// 	jsend.Error(w, err.Error(), http.StatusBadRequest)
 	// 	log.Println("commentAdd: ", err.Error())
@@ -37,7 +37,7 @@ func (h *Handler) commentAdd(w http.ResponseWriter, r *http.Request) {
 
 	// }
 
-	// jsend.Success(w, comment, http.StatusOK)
+	// jsend.Success(w, view, http.StatusOK)
 	jsend.Error(w, "Not implemented", http.StatusNotImplemented)
 }
 
@@ -60,7 +60,7 @@ func (h *Handler) commentEdit(w http.ResponseWriter, r *http.Request) {
 	comment.ID = uint(id)
 	comment.Content = data["content"]
 
-	err = h.commentService.Edit(&comment)
+	view, err := h.commentService.Edit(&comment)
 	switch {
 	case errors.Is(err, entity.ErrCommentNotFound):
 		jsend.Error(w, err.Error(), http.StatusNotFound)
@@ -71,7 +71,7 @@ func (h *Handler) commentEdit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	jsend.Success(w, comment, http.StatusOK)
+	jsend.Success(w, view, http.StatusOK)
 }
 
 func (h *Handler) commentDelete(w http.ResponseWriter, r *http.Request) {

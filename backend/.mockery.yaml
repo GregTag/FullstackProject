@@ -1,0 +1,14 @@
+with-expecter: True
+outpkg: "mocks"
+dir: "mocks/"
+packages:
+  backend/internal/entity:
+    interfaces:
+      UserRepository:
+      MediaRepository:
+      MediaTrackRepository:
+      CommentRepository:
+      UserService:
+      MediaService:
+      MediaTrackService:
+      CommentService:

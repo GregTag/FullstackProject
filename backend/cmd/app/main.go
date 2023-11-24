@@ -6,6 +6,7 @@ import (
 	repository_sqlite "backend/internal/repository/sqlite"
 	"backend/internal/service"
 	"context"
+	"flag"
 	"log"
 	"net/http"
 	"os"
@@ -16,7 +17,10 @@ import (
 var wait = time.Second * 15
 
 func main() {
-	db, err := repository_sqlite.NewSQLiteDB("umo.db")
+	db_path := flag.String("db", "umo.db", "Path to SQLite database")
+	flag.Parse()
+
+	db, err := repository_sqlite.NewSQLiteDB(*db_path)
 	if err != nil {
 		log.Panicf("Failed to initialize database: %s\n", err.Error())
 	} else {

@@ -22,16 +22,16 @@ type CommentView struct {
 }
 
 type CommentRepository interface {
-	Create(*CommentBase) error
-	Update(*CommentBase) error
+	Create(*Comment) error
+	Update(*Comment) error
 	Delete(id uint) error
 	Load(id uint) (*CommentView, error)
 	LoadAll(media_id uint) (*[]CommentView, error)
 }
 
 type CommentService interface {
-	Add(*CommentBase) error
-	Edit(*CommentBase) error
+	Add(*CommentBase) (*CommentView, error)
+	Edit(*CommentBase) (*CommentView, error)
 	Delete(id uint) error
 	LoadAll(media_id uint) (*[]CommentView, error)
 }

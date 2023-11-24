@@ -15,32 +15,38 @@ func NewCommentSQLite(db *gorm.DB) *CommentSQLite {
 	return &CommentSQLite{db: db}
 }
 
-func (r *CommentSQLite) Create(comment *entity.CommentBase) error {
-
-	result := r.db.Model(&entity.Comment{}).Create(comment)
-	if result.Error != nil {
-		return result.Error
-	} else {
-		return nil
+func (r *CommentSQLite) Create(comment *entity.Comment) error {
+	err := r.db.Model(comment).Create(comment).Error
+	if err != nil {
+		if checkPrimaryKeyError(err) {
+			return entity.ErrCommentAlreadyExists
+		} else {
+			return err
+		}
 	}
+	return nil
 }
 
-func (r *CommentSQLite) Update(comment *entity.CommentBase) error {
-	result := r.db.Model(&entity.Comment{}).Updates(comment)
+func (r *CommentSQLite) Update(comment *entity.Comment) error {
+	result := r.db.Model(comment).Updates(comment)
 	if result.Error != nil {
 		return result.Error
-	} else {
-		return nil
 	}
+	if result.RowsAffected == 0 {
+		return entity.ErrCommentNotFound
+	}
+	return nil
 }
 
 func (r *CommentSQLite) Delete(id uint) error {
 	result := r.db.Delete(&entity.Comment{}, id)
 	if result.Error != nil {
 		return result.Error
-	} else {
-		return nil
 	}
+	if result.RowsAffected == 0 {
+		return entity.ErrCommentNotFound
+	}
+	return nil
 }
 
 func (r *CommentSQLite) Load(id uint) (*entity.CommentView, error) {
@@ -50,9 +56,9 @@ func (r *CommentSQLite) Load(id uint) (*entity.CommentView, error) {
 	if result.Error == nil {
 		return &comment, nil
 	} else if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		return &comment, entity.ErrCommentNotFound
+		return nil, entity.ErrCommentNotFound
 	} else {
-		return &comment, result.Error
+		return nil, result.Error
 	}
 }
 

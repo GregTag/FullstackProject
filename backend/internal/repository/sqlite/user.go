@@ -16,30 +16,38 @@ func NewUserSQLite(db *gorm.DB) *UserSQLite {
 }
 
 func (r *UserSQLite) Create(user *entity.User) error {
-	result := r.db.Create(user)
-	if result.Error != nil {
-		return result.Error
-	} else {
-		return nil
+	err := r.db.Create(user).Error
+
+	if err != nil {
+		if checkPrimaryKeyError(err) {
+			return entity.ErrUserAlreadyExists
+		} else {
+			return err
+		}
 	}
+	return nil
 }
 
 func (r *UserSQLite) Update(user *entity.User) error {
 	result := r.db.Model(user).Updates(user)
 	if result.Error != nil {
 		return result.Error
-	} else {
-		return nil
 	}
+	if result.RowsAffected == 0 {
+		return entity.ErrUserNotFound
+	}
+	return nil
 }
 
 func (r *UserSQLite) Delete(id uint) error {
 	result := r.db.Delete(&entity.User{}, id)
 	if result.Error != nil {
 		return result.Error
-	} else {
-		return nil
 	}
+	if result.RowsAffected == 0 {
+		return entity.ErrUserNotFound
+	}
+	return nil
 }
 
 func (r *UserSQLite) Get(id uint) (*entity.User, error) {
@@ -49,9 +57,9 @@ func (r *UserSQLite) Get(id uint) (*entity.User, error) {
 	if result.Error == nil {
 		return &user, nil
 	} else if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		return &user, entity.ErrUserNotFound
+		return nil, entity.ErrUserNotFound
 	} else {
-		return &user, result.Error
+		return nil, result.Error
 	}
 }
 

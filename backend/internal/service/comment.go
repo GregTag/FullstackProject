@@ -1,6 +1,10 @@
 package service
 
-import "backend/internal/entity"
+import (
+	"backend/internal/entity"
+
+	"github.com/jinzhu/copier"
+)
 
 type CommentService struct {
 	commentRepository entity.CommentRepository
@@ -12,14 +16,26 @@ func NewCommentService(commentRepository entity.CommentRepository) *CommentServi
 	}
 }
 
-func (s *CommentService) Add(comment *entity.CommentBase) error {
-	err := s.commentRepository.Create(comment)
-	return err
+func (s *CommentService) Add(base *entity.CommentBase) (*entity.CommentView, error) {
+	comment := entity.Comment{CommentBase: *base}
+	err := s.commentRepository.Create(&comment)
+	if err != nil {
+		return nil, err
+	}
+	view := new(entity.CommentView)
+	copier.Copy(view, &comment)
+	return view, nil
 }
 
-func (s *CommentService) Edit(comment *entity.CommentBase) error {
-	err := s.commentRepository.Update(comment)
-	return err
+func (s *CommentService) Edit(base *entity.CommentBase) (*entity.CommentView, error) {
+	comment := entity.Comment{CommentBase: *base}
+	err := s.commentRepository.Update(&comment)
+	if err != nil {
+		return nil, err
+	}
+	view := new(entity.CommentView)
+	copier.Copy(view, &comment)
+	return view, nil
 }
 
 func (s *CommentService) Delete(id uint) error {

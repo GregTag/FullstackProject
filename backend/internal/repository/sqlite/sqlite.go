@@ -2,8 +2,10 @@ package repository_sqlite
 
 import (
 	"backend/internal/entity"
+	"errors"
 	"fmt"
 
+	"github.com/mattn/go-sqlite3"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -31,4 +33,12 @@ func NewSQLiteDB(db_path string) (*gorm.DB, error) {
 
 	fmt.Println("Database initialized")
 	return db, nil
+}
+
+func checkPrimaryKeyError(err error) bool {
+	var sqliteErr sqlite3.Error
+	if errors.As(err, &sqliteErr) {
+		return (sqliteErr.ExtendedCode & sqlite3.ErrConstraintPrimaryKey) == sqlite3.ErrConstraintPrimaryKey
+	}
+	return false
 }

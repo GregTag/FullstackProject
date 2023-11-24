@@ -16,30 +16,37 @@ func NewMediaSQLite(db *gorm.DB) *MediaSQLite {
 }
 
 func (r *MediaSQLite) Create(media *entity.Media) error {
-	result := r.db.Create(media)
-	if result.Error != nil {
-		return result.Error
-	} else {
-		return nil
+	err := r.db.Create(media).Error
+	if err != nil {
+		if checkPrimaryKeyError(err) {
+			return entity.ErrMediaAlreadyExists
+		} else {
+			return err
+		}
 	}
+	return nil
 }
 
 func (r *MediaSQLite) Update(media *entity.Media) error {
 	result := r.db.Model(media).Updates(media)
 	if result.Error != nil {
 		return result.Error
-	} else {
-		return nil
 	}
+	if result.RowsAffected == 0 {
+		return entity.ErrMediaNotFound
+	}
+	return nil
 }
 
 func (r *MediaSQLite) Delete(id uint) error {
 	result := r.db.Delete(&entity.Media{}, id)
 	if result.Error != nil {
 		return result.Error
-	} else {
-		return nil
 	}
+	if result.RowsAffected == 0 {
+		return entity.ErrMediaNotFound
+	}
+	return nil
 }
 
 func (r *MediaSQLite) Get(id uint) (*entity.Media, error) {
@@ -49,9 +56,9 @@ func (r *MediaSQLite) Get(id uint) (*entity.Media, error) {
 	if result.Error == nil {
 		return &media, nil
 	} else if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		return &media, entity.ErrMediaNotFound
+		return nil, entity.ErrMediaNotFound
 	} else {
-		return &media, result.Error
+		return nil, result.Error
 	}
 }
 
@@ -101,7 +108,7 @@ func (r *MediaSQLite) Search(filter *entity.Filter) (*[]entity.MediaResult, erro
 		query = query.Where("cumulative_rating <= number_of_votes * ?", filter.RatingTo)
 	}
 
-	err := query.Select("id, title, image, cumulative_rating / number_of_votes AS rating").Scan(&results).Error
+	err := query.Select("id, title, image, cumulative_rating / number_of_ratings AS rating").Scan(&results).Error
 	if err != nil {
 		return nil, err
 	}
