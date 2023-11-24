@@ -8,6 +8,7 @@ require (
 )
 
 require (
+	clevergo.tech/jsend v1.1.3
 	github.com/gorilla/mux v1.8.1
 	github.com/jinzhu/copier v0.4.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect

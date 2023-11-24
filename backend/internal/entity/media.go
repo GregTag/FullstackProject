@@ -1,6 +1,9 @@
 package entity
 
-import "time"
+import (
+	"backend/pkg/helpers"
+	"time"
+)
 
 type Media struct {
 	ID               uint `gorm:"primaryKey"`
@@ -39,6 +42,8 @@ type Filter struct {
 	RatingFrom   float32
 	RatingTo     float32
 }
+
+var Categories = helpers.MakeStringSet("Serials", "Movies", "Books", "Lectures")
 
 type MediaRepository interface {
 	Create(*Media) error

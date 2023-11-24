@@ -3,7 +3,7 @@ info:
   version: "1.0.0"
   title: "Universal Media Organizer API"
 servers:
-  - url: http://localhost:8081
+  - url: http://localhost:8000
     description: "Local server"
 tags:
   - name: "user"
@@ -49,8 +49,8 @@ paths:
                 properties:
                   status:
                     type: "string"
-                    enum: ["fail"]
-                  data:
+                    enum: ["error"]
+                  message:
                     type: "string"
         "409":
           description: "User already exists"
@@ -98,8 +98,8 @@ paths:
                 properties:
                   status:
                     type: "string"
-                    enum: ["fail"]
-                  data:
+                    enum: ["error"]
+                  message:
                     type: "string"
         "403":
           description: "Invalid credentials"
@@ -140,8 +140,8 @@ paths:
                 properties:
                   status:
                     type: "string"
-                    enum: ["fail"]
-                  data:
+                    enum: ["error"]
+                  message:
                     type: "string"
         "401":
           description: "Unauthorized"
@@ -194,11 +194,23 @@ paths:
                 properties:
                   status:
                     type: "string"
-                    enum: ["fail"]
-                  data:
+                    enum: ["error"]
+                  message:
                     type: "string"
         "401":
           description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  status:
+                    type: "string"
+                    enum: ["error"]
+                  message:
+                    type: "string"
+        "404":
+          description: "Track not found"
           content:
             application/json:
               schema:
@@ -243,8 +255,8 @@ paths:
                 properties:
                   status:
                     type: "string"
-                    enum: ["fail"]
-                  data:
+                    enum: ["error"]
+                  message:
                     type: "string"
         "401":
           description: "Unauthorized"
@@ -305,8 +317,8 @@ paths:
                 properties:
                   status:
                     type: "string"
-                    enum: ["fail"]
-                  data:
+                    enum: ["error"]
+                  message:
                     type: "string"
         "404":
           description: "Media not found"
@@ -373,8 +385,8 @@ paths:
                 properties:
                   status:
                     type: "string"
-                    enum: ["fail"]
-                  data:
+                    enum: ["error"]
+                  message:
                     type: "string"
         "401":
           description: "Unauthorized"
@@ -444,11 +456,23 @@ paths:
                 properties:
                   status:
                     type: "string"
-                    enum: ["fail"]
-                  data:
+                    enum: ["error"]
+                  message:
                     type: "string"
         "401":
           description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  status:
+                    type: "string"
+                    enum: ["error"]
+                  message:
+                    type: "string"
+        "404":
+          description: "Track not found"
           content:
             application/json:
               schema:
@@ -494,8 +518,8 @@ paths:
                 properties:
                   status:
                     type: "string"
-                    enum: ["fail"]
-                  data:
+                    enum: ["error"]
+                  message:
                     type: "string"
         "401":
           description: "Unauthorized"
@@ -557,8 +581,8 @@ paths:
                 properties:
                   status:
                     type: "string"
-                    enum: ["fail"]
-                  data:
+                    enum: ["error"]
+                  message:
                     type: "string"
   /comment/add:
     post:
@@ -600,8 +624,8 @@ paths:
                 properties:
                   status:
                     type: "string"
-                    enum: ["fail"]
-                  data:
+                    enum: ["error"]
+                  message:
                     type: "string"
         "401":
           description: "Unauthorized"
@@ -655,11 +679,23 @@ paths:
                 properties:
                   status:
                     type: "string"
-                    enum: ["fail"]
-                  data:
+                    enum: ["error"]
+                  message:
                     type: "string"
         "401":
           description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  status:
+                    type: "string"
+                    enum: ["error"]
+                  message:
+                    type: "string"
+        "404":
+          description: "Track not found"
           content:
             application/json:
               schema:
@@ -705,8 +741,8 @@ paths:
                 properties:
                   status:
                     type: "string"
-                    enum: ["fail"]
-                  data:
+                    enum: ["error"]
+                  message:
                     type: "string"
         "401":
           description: "Unauthorized"
@@ -774,8 +810,8 @@ paths:
                 properties:
                   status:
                     type: "string"
-                    enum: ["fail"]
-                  data:
+                    enum: ["error"]
+                  message:
                     type: "string"
         "401":
           description: "Unauthorized"
@@ -831,11 +867,23 @@ paths:
                 properties:
                   status:
                     type: "string"
-                    enum: ["fail"]
-                  data:
+                    enum: ["error"]
+                  message:
                     type: "string"
         "401":
           description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  status:
+                    type: "string"
+                    enum: ["error"]
+                  message:
+                    type: "string"
+        "404":
+          description: "Track not found"
           content:
             application/json:
               schema:
@@ -881,8 +929,8 @@ paths:
                 properties:
                   status:
                     type: "string"
-                    enum: ["fail"]
-                  data:
+                    enum: ["error"]
+                  message:
                     type: "string"
         "401":
           description: "Unauthorized"

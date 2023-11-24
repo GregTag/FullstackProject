@@ -13,7 +13,7 @@ type CommentBase struct {
 
 type Comment struct {
 	CommentBase
-	Sender User `gorm:"references:SenderID"`
+	Sender User `gorm:"foreignKey:SenderID"`
 }
 
 type CommentView struct {

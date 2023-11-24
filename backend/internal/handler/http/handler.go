@@ -3,7 +3,12 @@ package handler
 import (
 	"backend/internal/entity"
 	"backend/internal/service"
+	"encoding/json"
+	"log"
+	"net/http"
+	"strconv"
 
+	"clevergo.tech/jsend"
 	"github.com/gorilla/mux"
 )
 
@@ -47,4 +52,36 @@ func (h *Handler) NewRouter() *mux.Router {
 	r.HandleFunc("/track/delete/{id}", h.trackDelete).Methods("DELETE")
 
 	return r
+}
+
+func parseBody(w http.ResponseWriter, r *http.Request, v any) error {
+	err := json.NewDecoder(r.Body).Decode(v)
+	if err != nil {
+		jsend.Error(w, err.Error(), http.StatusBadRequest)
+	}
+	return err
+}
+
+func getParam(w http.ResponseWriter, r *http.Request, param string) (string, bool) {
+	vars := mux.Vars(r)
+	value, exists := vars[param]
+	if !exists {
+		jsend.Error(w, param+" not specified", http.StatusBadRequest)
+	}
+	return value, exists
+}
+
+func getIdParam(w http.ResponseWriter, r *http.Request) (uint, bool) {
+	value, exists := getParam(w, r, "id")
+	if !exists {
+		return 0, false
+	}
+	id, err := strconv.ParseUint(value, 10, 0)
+	if err != nil {
+		jsend.Error(w, "ID must be integer value", http.StatusBadRequest)
+		log.Println("getIntParam: ", err.Error())
+		return 0, false
+	}
+	return uint(id), true
+
 }

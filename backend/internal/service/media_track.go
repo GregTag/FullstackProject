@@ -36,8 +36,8 @@ func (s *MediaTrackService) Change(track *entity.MediaTrackBase) error {
 	return err
 }
 
-func (s *MediaTrackService) Untrack(track *entity.MediaTrackBase) error {
-	err := s.mediaTrackRepository.Delete(track.UserID, track.MediaID)
+func (s *MediaTrackService) Untrack(user_id uint, media_id uint) error {
+	err := s.mediaTrackRepository.Delete(user_id, media_id)
 	return err
 }
 

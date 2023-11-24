@@ -101,7 +101,7 @@ func (r *MediaTrackSQLite) Get(user_id uint, media_id uint) (*entity.MediaTrack,
 func (r *MediaTrackSQLite) LoadAll(user_id uint) (*[]entity.MediaTrackView, error) {
 	var tracks []entity.MediaTrackView
 
-	result := r.db.Table("media_track").Select("media_track.*, media.title as media_title").Joins("JOIN media ON media_track.media_id = media.id").Where("media_track.user_id = ?", user_id).Scan(&tracks)
+	result := r.db.Table("media_tracks").Select("media_tracks.*, media.title as media_title").Joins("JOIN media ON media_tracks.media_id = media.id").Where("media_tracks.user_id = ?", user_id).Scan(&tracks)
 	if result.Error != nil {
 		return nil, result.Error
 	} else {

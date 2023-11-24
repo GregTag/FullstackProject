@@ -1,5 +1,7 @@
 package entity
 
+import "backend/pkg/helpers"
+
 type MediaTrackBase struct {
 	UserID      uint `gorm:"primaryKey"`
 	MediaID     uint `gorm:"primaryKey"`
@@ -7,9 +9,13 @@ type MediaTrackBase struct {
 	TrackStatus string
 }
 
+const MaxRating = 10
+
+var TrackStatuses = helpers.MakeStringSet("planned", "in_progress", "completed", "dropped")
+
 type MediaTrack struct {
 	MediaTrackBase
-	Media Media `gorm:"references:MediaID"`
+	Media Media `gorm:"foreignKey:MediaID"`
 }
 
 type MediaTrackView struct {
@@ -28,6 +34,6 @@ type MediaTrackRepository interface {
 type MediaTrackService interface {
 	Track(*MediaTrackBase) error
 	Change(*MediaTrackBase) error
-	Untrack(*MediaTrackBase) error
+	Untrack(user_id uint, media_id uint) error
 	LoadAll(user_id uint) (*[]MediaTrackView, error)
 }

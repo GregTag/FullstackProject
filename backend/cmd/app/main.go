@@ -28,7 +28,7 @@ func main() {
 	h := handler.NewHandler(service)
 
 	server := &http.Server{
-		Addr: "127.0.0.1:8000",
+		Addr: "0.0.0.0:8000",
 		// Good practice to set timeouts to avoid Slowloris attacks.
 		WriteTimeout: time.Second * 15,
 		ReadTimeout:  time.Second * 15,

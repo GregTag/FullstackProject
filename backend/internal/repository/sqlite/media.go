@@ -49,7 +49,7 @@ func (r *MediaSQLite) Get(id uint) (*entity.Media, error) {
 	if result.Error == nil {
 		return &media, nil
 	} else if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		return &media, entity.ErrUserNotFound
+		return &media, entity.ErrMediaNotFound
 	} else {
 		return &media, result.Error
 	}

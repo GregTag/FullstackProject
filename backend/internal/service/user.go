@@ -2,7 +2,8 @@ package service
 
 import (
 	"backend/internal/entity"
-	"backend/pkg/hash"
+	"backend/pkg/helpers"
+
 	"time"
 
 	"github.com/jinzhu/copier"
@@ -39,7 +40,7 @@ func (s *UserService) Register(user_reg *entity.UserRegister) (*entity.UserInfo,
 		return nil, err
 	}
 
-	passwordHash, err := hash.GeneratePasswordHash(user_reg.Password)
+	passwordHash, err := helpers.GeneratePasswordHash(user_reg.Password)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +61,7 @@ func (s *UserService) Login(user_log *entity.UserLogin) (*entity.UserInfo, error
 	if err != nil {
 		return nil, err
 	}
-	err = hash.ComparePasswordWithHash(user_log.Password, user.Password)
+	err = helpers.ComparePasswordWithHash(user_log.Password, user.Password)
 	if err != nil {
 		return nil, err
 	}
