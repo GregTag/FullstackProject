@@ -1,7 +1,7 @@
 # Backend
 
 ## API Documentation
-[Swagger API](./docs/api.yaml)
+[Swagger API](./docs/openapi.yaml)
 
 
 ## Diagrams
