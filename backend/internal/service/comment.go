@@ -38,8 +38,8 @@ func (s *CommentService) Edit(base *entity.CommentBase) (*entity.CommentView, er
 	return view, nil
 }
 
-func (s *CommentService) Delete(id uint) error {
-	err := s.commentRepository.Delete(id)
+func (s *CommentService) Delete(id, sender_id uint) error {
+	err := s.commentRepository.Delete(id, sender_id)
 	return err
 }
 

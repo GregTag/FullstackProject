@@ -3,10 +3,10 @@ package entity
 import "backend/pkg/helpers"
 
 type MediaTrackBase struct {
-	UserID      uint `gorm:"primaryKey"`
-	MediaID     uint `gorm:"primaryKey"`
-	Rating      uint8
-	TrackStatus string
+	UserID      uint   `gorm:"primaryKey" json:"user_id"`
+	MediaID     uint   `gorm:"primaryKey" json:"media_id"`
+	Rating      uint8  `json:"rating"`
+	TrackStatus string `json:"track_status"`
 }
 
 const MaxRating = 10
@@ -20,7 +20,7 @@ type MediaTrack struct {
 
 type MediaTrackView struct {
 	MediaTrackBase
-	MediaTitle string
+	MediaTitle string `json:"media_title"`
 }
 
 type MediaTrackRepository interface {

@@ -38,8 +38,8 @@ func (r *CommentSQLite) Update(comment *entity.Comment) error {
 	return nil
 }
 
-func (r *CommentSQLite) Delete(id uint) error {
-	result := r.db.Delete(&entity.Comment{}, id)
+func (r *CommentSQLite) Delete(id, sender_id uint) error {
+	result := r.db.Model(&entity.Comment{}).Where("id = ? AND sender_id = ?", id, sender_id).Delete(&entity.Comment{})
 	if result.Error != nil {
 		return result.Error
 	}
@@ -49,10 +49,10 @@ func (r *CommentSQLite) Delete(id uint) error {
 	return nil
 }
 
-func (r *CommentSQLite) Load(id uint) (*entity.CommentView, error) {
+func (r *CommentSQLite) Load(id, sender_id uint) (*entity.CommentView, error) {
 	var comment entity.CommentView
 
-	result := r.db.Model(&entity.Comment{}).First(&comment, id)
+	result := r.db.Model(&entity.Comment{}).Where("id = ? AND sender_id = ?", id, sender_id).First(&comment)
 	if result.Error == nil {
 		return &comment, nil
 	} else if errors.Is(result.Error, gorm.ErrRecordNotFound) {

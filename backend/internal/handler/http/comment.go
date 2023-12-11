@@ -5,60 +5,67 @@ import (
 	"errors"
 	"log"
 	"net/http"
-	"strconv"
 
 	"clevergo.tech/jsend"
 )
 
 func (h *Handler) commentAdd(w http.ResponseWriter, r *http.Request) {
-	// TODO add authorization, take user_id from JWT
-	var data map[string]string
-	if parseBody(w, r, &data) != nil {
+	user_id, verified := h.checkAuth(w, r)
+	if !verified {
 		return
 	}
 
-	media_id, err := strconv.ParseUint(data["media_id"], 10, 0)
+	var data map[string]interface{}
+	if parseBody(w, r, &data) != nil {
+		return
+	}
+	media_id, ok1 := data["media_id"].(float64)
+	content, ok2 := data["content"].(string)
+	if !ok1 || !ok2 {
+		jsend.Error(w, "invalid comment", http.StatusBadRequest)
+		return
+	}
+
+	comment := entity.CommentBase{
+		SenderID: user_id,
+		MediaID:  uint(media_id),
+		Content:  content,
+	}
+
+	view, err := h.commentService.Add(&comment)
 	if err != nil {
 		jsend.Error(w, err.Error(), http.StatusBadRequest)
 		log.Println("commentAdd: ", err.Error())
 		return
+
 	}
 
-	var comment entity.CommentBase
-	// comment.UserID =
-	comment.MediaID = uint(media_id)
-	comment.Content = data["content"]
-
-	// view, err = h.commentService.Add(&comment)
-	// if err != nil {
-	// 	jsend.Error(w, err.Error(), http.StatusBadRequest)
-	// 	log.Println("commentAdd: ", err.Error())
-	// 	return
-
-	// }
-
-	// jsend.Success(w, view, http.StatusOK)
-	jsend.Error(w, "Not implemented", http.StatusNotImplemented)
+	jsend.Success(w, view, http.StatusOK)
 }
 
 func (h *Handler) commentEdit(w http.ResponseWriter, r *http.Request) {
-	// TODO: add authorization
-	var data map[string]string
+	user_id, verified := h.checkAuth(w, r)
+	if !verified {
+		return
+	}
+
+	var data map[string]interface{}
 	if parseBody(w, r, &data) != nil {
 		return
 	}
 
-	id, err := strconv.ParseUint(data["id"], 10, 0)
-	if err != nil {
-		jsend.Error(w, err.Error(), http.StatusBadRequest)
-		log.Println("commentAdd: ", err.Error())
+	id, ok1 := data["id"].(float64)
+	content, ok2 := data["content"].(string)
+	if !ok1 || !ok2 {
+		jsend.Error(w, "invalid comment", http.StatusBadRequest)
 		return
 	}
 
-	var comment entity.CommentBase
-
-	comment.ID = uint(id)
-	comment.Content = data["content"]
+	comment := entity.CommentBase{
+		ID:       uint(id),
+		SenderID: user_id,
+		Content:  content,
+	}
 
 	view, err := h.commentService.Edit(&comment)
 	switch {
@@ -75,13 +82,17 @@ func (h *Handler) commentEdit(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) commentDelete(w http.ResponseWriter, r *http.Request) {
-	// TODO: add authorization
+	user_id, verified := h.checkAuth(w, r)
+	if !verified {
+		return
+	}
+
 	id, exists := getIdParam(w, r)
 	if !exists {
 		return
 	}
 
-	err := h.commentService.Delete(id)
+	err := h.commentService.Delete(id, user_id)
 	switch {
 	case errors.Is(err, entity.ErrCommentNotFound):
 		jsend.Error(w, err.Error(), http.StatusNotFound)

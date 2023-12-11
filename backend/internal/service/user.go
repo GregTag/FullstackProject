@@ -93,5 +93,6 @@ func (s *UserService) Change(view *entity.UserView) error {
 		return err
 	}
 	err = s.userRepository.Update(&user)
+	copier.Copy(&view, &user)
 	return err
 }

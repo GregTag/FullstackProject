@@ -18,7 +18,7 @@ func NewMediaTrackSQLite(db *gorm.DB) *MediaTrackSQLite {
 
 func (r *MediaTrackSQLite) Create(track *entity.MediaTrack) error {
 	err := r.db.Transaction(func(tx *gorm.DB) error {
-		err := tx.Create(track).Error
+		err := tx.Omit("Media").Create(track).Error
 		if err != nil {
 			if checkPrimaryKeyError(err) {
 				return entity.ErrMediaTrackAlreadyExists
@@ -26,18 +26,21 @@ func (r *MediaTrackSQLite) Create(track *entity.MediaTrack) error {
 				return err
 			}
 		}
-
+		err = tx.Model(track).Association("Media").Find(&track.Media)
+		if err != nil {
+			return err
+		}
 		if track.Media.ID == 0 {
 			return entity.ErrMediaNotFound
 		}
 
 		if track.Rating != 0 {
-			track.Media.CumulativeRating += uint64(track.Rating)
+			track.Media.CumulativeRating += int32(track.Rating)
 			track.Media.NumberOfRatings += 1
 		}
 		track.Media.NumberOfTracks += 1
 
-		err = tx.Model(track.Media).Updates(track.Media).Error
+		err = tx.Model(track.Media).Select("cumulative_rating", "number_of_ratings", "number_of_tracks").Updates(track.Media).Error
 		return err
 	})
 	return err
@@ -55,12 +58,20 @@ func (r *MediaTrackSQLite) Update(track *entity.MediaTrack) error {
 				return err
 			}
 		}
-		err = tx.Model(track).Updates(track).Error
+		err = tx.Model(track).Omit("Media").Updates(track).Error
 		if err != nil {
 			return err
 		}
+		err = tx.Model(track).Association("Media").Find(&track.Media)
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return entity.ErrMediaNotFound
+			} else {
+				return err
+			}
+		}
 
-		track.Media.CumulativeRating += uint64(track.Rating - rating)
+		track.Media.CumulativeRating += int32(track.Rating) - int32(rating)
 		if rating == 0 {
 			track.Media.NumberOfRatings += 1
 		}
@@ -68,12 +79,12 @@ func (r *MediaTrackSQLite) Update(track *entity.MediaTrack) error {
 			track.Media.NumberOfRatings -= 1
 		}
 
-		result := tx.Model(track.Media).Updates(track.Media)
+		result := tx.Model(track.Media).Select("cumulative_rating", "number_of_ratings", "number_of_tracks").Updates(track.Media)
 		if result.Error != nil {
 			return result.Error
 		}
 		if result.RowsAffected == 0 {
-			return entity.ErrUserNotFound
+			return entity.ErrMediaNotFound
 		}
 		return nil
 	})
@@ -82,18 +93,18 @@ func (r *MediaTrackSQLite) Update(track *entity.MediaTrack) error {
 
 func (r *MediaTrackSQLite) Delete(user_id uint, media_id uint) error {
 	err := r.db.Transaction(func(tx *gorm.DB) error {
-		track, err := r.Get(user_id, media_id)
+		track, err := getImpl(tx, user_id, media_id)
 		if err != nil {
 			return err
 		}
 
 		if track.Rating != 0 {
-			track.Media.CumulativeRating -= uint64(track.Rating)
+			track.Media.CumulativeRating -= int32(track.Rating)
 			track.Media.NumberOfRatings -= 1
 		}
 		track.Media.NumberOfTracks -= 1
 
-		err = tx.Model(track.Media).Updates(track.Media).Error
+		err = tx.Model(track.Media).Select("cumulative_rating", "number_of_ratings", "number_of_tracks").Updates(track.Media).Error
 		if err != nil {
 			return err
 		}
@@ -103,7 +114,7 @@ func (r *MediaTrackSQLite) Delete(user_id uint, media_id uint) error {
 			return result.Error
 		}
 		if result.RowsAffected == 0 {
-			return entity.ErrUserNotFound
+			return entity.ErrMediaNotFound
 		}
 		return nil
 	})
@@ -111,9 +122,13 @@ func (r *MediaTrackSQLite) Delete(user_id uint, media_id uint) error {
 }
 
 func (r *MediaTrackSQLite) Get(user_id uint, media_id uint) (*entity.MediaTrack, error) {
+	return getImpl(r.db, user_id, media_id)
+}
+
+func getImpl(db *gorm.DB, user_id uint, media_id uint) (*entity.MediaTrack, error) {
 	var track entity.MediaTrack
 
-	result := r.db.Model(&entity.MediaTrack{}).Preload("Media").Where("user_id = ? AND media_id = ?", user_id, media_id).First(&track)
+	result := db.Model(&entity.MediaTrack{}).Preload("Media").Where("user_id = ? AND media_id = ?", user_id, media_id).First(&track)
 	if result.Error == nil {
 		return &track, nil
 	} else if errors.Is(result.Error, gorm.ErrRecordNotFound) {

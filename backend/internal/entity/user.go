@@ -5,36 +5,36 @@ import (
 )
 
 type User struct {
-	ID uint `gorm:"primaryKey"`
+	ID uint `gorm:"primaryKey" json:"id"`
 	UserRegister
-	Avatar      string
-	CreatedAt   time.Time `gorm:"<-:false"`
-	LastLoginAt time.Time
+	Avatar      string    `json:"avatar"`
+	CreatedAt   time.Time `gorm:"<-:create" json:"created_at"`
+	LastLoginAt time.Time `json:"last_login_at"`
 }
 
 type UserLogin struct {
-	Login    string `gorm:"unique;<-:create"`
-	Password string
+	Login    string `gorm:"unique;<-:create" json:"login"`
+	Password string `json:"password"`
 }
 
 type UserRegister struct {
 	UserLogin
-	Fullname string
-	Email    string `gorm:"unique"`
+	Fullname string `json:"fullname"`
+	Email    string `gorm:"unique" json:"email"`
 }
 
 type UserView struct {
-	ID          uint
-	Login       string
-	Fullname    string
-	Avatar      string
-	CreatedAt   time.Time
-	LastLoginAt time.Time
+	ID          uint      `json:"id"`
+	Login       string    `json:"login"`
+	Fullname    string    `json:"fullname"`
+	Avatar      string    `json:"avatar"`
+	CreatedAt   time.Time `json:"created_at"`
+	LastLoginAt time.Time `json:"last_login_at"`
 }
 
 type UserInfo struct {
-	User   UserView
-	Tracks []MediaTrackView
+	User   UserView         `json:"user"`
+	Tracks []MediaTrackView `json:"tracks"`
 }
 
 type UserRepository interface {

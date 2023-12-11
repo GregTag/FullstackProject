@@ -28,12 +28,22 @@ func (r *MediaSQLite) Create(media *entity.Media) error {
 }
 
 func (r *MediaSQLite) Update(media *entity.Media) error {
-	result := r.db.Model(media).Updates(media)
-	if result.Error != nil {
-		return result.Error
-	}
-	if result.RowsAffected == 0 {
-		return entity.ErrMediaNotFound
+	err := r.db.Transaction(func(tx *gorm.DB) error {
+		err := tx.Model(media).Association("Genres").Replace(media.Genres)
+		if err != nil {
+			return err
+		}
+		result := tx.Model(media).Updates(media)
+		if result.Error != nil {
+			return result.Error
+		}
+		if result.RowsAffected == 0 {
+			return entity.ErrMediaNotFound
+		}
+		return nil
+	})
+	if err != nil {
+		return err
 	}
 	return nil
 }
@@ -52,7 +62,7 @@ func (r *MediaSQLite) Delete(id uint) error {
 func (r *MediaSQLite) Get(id uint) (*entity.Media, error) {
 	var media entity.Media
 
-	result := r.db.First(&media, id)
+	result := r.db.Preload("Genres").First(&media, id)
 	if result.Error == nil {
 		return &media, nil
 	} else if errors.Is(result.Error, gorm.ErrRecordNotFound) {

@@ -2,7 +2,6 @@ package handler
 
 import (
 	"backend/internal/entity"
-	"backend/pkg/helpers"
 	"errors"
 	"log"
 	"net/http"
@@ -32,24 +31,9 @@ func (h *Handler) mediaLoad(w http.ResponseWriter, r *http.Request) {
 	jsend.Success(w, media, http.StatusOK)
 }
 
-var mediaChangableFields = helpers.MakeStringSet("title", "description", "image", "category", "releaseYear", "duration", "genres")
-
-func mediaCheckFields(data *map[string]interface{}, allow_id bool) bool {
-	for key := range *data {
-		if !mediaChangableFields.Contains(key) || (allow_id && key == "id") {
-			return false
-		}
-	}
-	return true
-}
-
 func parseMedia(w http.ResponseWriter, r *http.Request, media *entity.Media, allow_id bool) bool {
-	var data map[string]interface{}
+	var data entity.MediaBase
 	if parseBody(w, r, &data) != nil {
-		return false
-	}
-	if !mediaCheckFields(&data, allow_id) {
-		jsend.Error(w, "Invalid fields", http.StatusBadRequest)
 		return false
 	}
 	err := copier.Copy(media, &data)
@@ -67,7 +51,11 @@ func parseMedia(w http.ResponseWriter, r *http.Request, media *entity.Media, all
 }
 
 func (h *Handler) mediaAdd(w http.ResponseWriter, r *http.Request) {
-	// TODO: add authorization
+	_, verified := h.checkAuth(w, r)
+	if !verified {
+		return
+	}
+
 	var media entity.Media
 	if !parseMedia(w, r, &media, false) {
 		return
@@ -88,7 +76,11 @@ func (h *Handler) mediaAdd(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) mediaEdit(w http.ResponseWriter, r *http.Request) {
-	// TODO: add authorization
+	_, verified := h.checkAuth(w, r)
+	if !verified {
+		return
+	}
+
 	var media entity.Media
 	if !parseMedia(w, r, &media, true) {
 		return
@@ -109,7 +101,11 @@ func (h *Handler) mediaEdit(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) mediaDelete(w http.ResponseWriter, r *http.Request) {
-	// TODO: add authorization
+	_, verified := h.checkAuth(w, r)
+	if !verified {
+		return
+	}
+
 	id, exists := getIdParam(w, r)
 	if !exists {
 		return

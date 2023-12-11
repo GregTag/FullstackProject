@@ -30,22 +30,28 @@ func (suite *MediaTrackTestSuite) SetupTest() {
 	suite.repo = repository_sqlite.NewMediaTrackSQLite(db)
 }
 func (suite *MediaTrackTestSuite) TestCreate() {
+	// Create a media
+	media := entity.Media{MediaBase: entity.MediaBase{
+		ID:    1,
+		Title: "Test Media"},
+		CumulativeRating: 100,
+		NumberOfRatings:  10,
+		NumberOfTracks:   5,
+	}
+	err := suite.db.Save(&media).Error
+	suite.NoError(err)
+
 	// Create a new media track
 	track := &entity.MediaTrack{
-		Media: entity.Media{
-			ID:               1,
-			Title:            "Test Media",
-			CumulativeRating: 100,
-			NumberOfRatings:  10,
-			NumberOfTracks:   5,
-		},
 		MediaTrackBase: entity.MediaTrackBase{
-			Rating: 4,
+			UserID:  1,
+			MediaID: 1,
+			Rating:  4,
 		},
 	}
 
 	// Call the Create method
-	err := suite.repo.Create(track)
+	err = suite.repo.Create(track)
 
 	// Assert that there are no errors
 	suite.NoError(err)
@@ -69,26 +75,33 @@ func (suite *MediaTrackTestSuite) TestCreate() {
 	suite.Equal(track.Media.NumberOfTracks, updatedMedia.NumberOfTracks)
 	suite.Equal(track.Media.CumulativeRating, updatedMedia.CumulativeRating)
 	suite.Equal(track.Media.NumberOfRatings, updatedMedia.NumberOfRatings)
+	suite.Equal(media.CumulativeRating+int32(track.Rating), updatedMedia.CumulativeRating)
+	suite.Equal(media.NumberOfRatings+1, updatedMedia.NumberOfRatings)
+	suite.Equal(media.NumberOfTracks+1, updatedMedia.NumberOfTracks)
 }
 func (suite *MediaTrackTestSuite) TestUpdate() {
+	// Create a media
+	media := entity.Media{MediaBase: entity.MediaBase{
+		ID:    2,
+		Title: "Test Media"},
+		CumulativeRating: 100,
+		NumberOfRatings:  10,
+		NumberOfTracks:   5,
+	}
+	err := suite.db.Save(&media).Error
+	suite.NoError(err)
+
 	// Create a new media track
 	track := &entity.MediaTrack{
-		Media: entity.Media{
-			ID:               1,
-			Title:            "Test Media",
-			CumulativeRating: 100,
-			NumberOfRatings:  10,
-			NumberOfTracks:   5,
-		},
 		MediaTrackBase: entity.MediaTrackBase{
 			UserID:  1,
-			MediaID: 1,
+			MediaID: 2,
 			Rating:  4,
 		},
 	}
 
 	// Call the Create method to create the media track
-	err := suite.repo.Create(track)
+	err = suite.repo.Create(track)
 	suite.NoError(err)
 
 	// Update the media track
@@ -105,14 +118,17 @@ func (suite *MediaTrackTestSuite) TestUpdate() {
 	suite.Equal(track.Media.CumulativeRating, updatedTrack.Media.CumulativeRating)
 	suite.Equal(track.Media.NumberOfRatings, updatedTrack.Media.NumberOfRatings)
 	suite.Equal(track.Media.NumberOfTracks, updatedTrack.Media.NumberOfTracks)
+	suite.Equal(media.CumulativeRating+5, updatedTrack.Media.CumulativeRating)
+	suite.Equal(media.NumberOfRatings+1, updatedTrack.Media.NumberOfRatings)
+	suite.Equal(media.NumberOfTracks+1, updatedTrack.Media.NumberOfTracks)
 }
 
 func (suite *MediaTrackTestSuite) TestUpdate_NotFound() {
 	// Create a new media track
 	track := &entity.MediaTrack{
-		Media: entity.Media{
-			ID:               100,
-			Title:            "Test Media",
+		Media: entity.Media{MediaBase: entity.MediaBase{
+			ID:    100,
+			Title: "Test Media"},
 			CumulativeRating: 100,
 			NumberOfRatings:  10,
 			NumberOfTracks:   5,
@@ -131,24 +147,27 @@ func (suite *MediaTrackTestSuite) TestUpdate_NotFound() {
 	suite.Equal(entity.ErrMediaTrackNotFound, err)
 }
 func (suite *MediaTrackTestSuite) TestDelete() {
+	// Create a media
+	media := entity.Media{MediaBase: entity.MediaBase{
+		ID:    4,
+		Title: "Test Media"},
+		CumulativeRating: 100,
+		NumberOfRatings:  10,
+		NumberOfTracks:   5,
+	}
+	err := suite.db.Save(&media).Error
+	suite.NoError(err)
 	// Create a new media track
 	track := &entity.MediaTrack{
-		Media: entity.Media{
-			ID:               1,
-			Title:            "Test Media",
-			CumulativeRating: 100,
-			NumberOfRatings:  10,
-			NumberOfTracks:   5,
-		},
 		MediaTrackBase: entity.MediaTrackBase{
 			UserID:  1,
-			MediaID: 1,
+			MediaID: 4,
 			Rating:  4,
 		},
 	}
 
 	// Call the Create method to create the media track
-	err := suite.repo.Create(track)
+	err = suite.repo.Create(track)
 	suite.NoError(err)
 
 	// Call the Delete method
@@ -167,8 +186,9 @@ func (suite *MediaTrackTestSuite) TestDelete() {
 	result := suite.db.First(&updatedMedia, track.Media.ID)
 	suite.NoError(result.Error)
 	suite.Equal(track.Media.NumberOfTracks-1, updatedMedia.NumberOfTracks)
-	suite.Equal(track.Media.CumulativeRating-uint64(track.Rating), updatedMedia.CumulativeRating)
+	suite.Equal(track.Media.CumulativeRating-int32(track.Rating), updatedMedia.CumulativeRating)
 	suite.Equal(track.Media.NumberOfRatings-1, updatedMedia.NumberOfRatings)
+	suite.Equal(media, updatedMedia)
 }
 
 func (suite *MediaTrackTestSuite) TestDelete_NotFound() {

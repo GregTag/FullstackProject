@@ -5,18 +5,22 @@ import (
 	"time"
 )
 
+type MediaBase struct {
+	ID          uint          `gorm:"primaryKey" json:"id"`
+	Title       string        `json:"title"`
+	Description string        `json:"description"`
+	Image       string        `json:"image"`
+	Category    string        `json:"category"`
+	ReleaseYear uint32        `json:"release_year"`
+	Duration    time.Duration `json:"duration"`
+	Genres      []Genre       `gorm:"foreignKey:MediaID"`
+}
+
 type Media struct {
-	ID               uint `gorm:"primaryKey"`
-	Title            string
-	Description      string
-	Image            string
-	Category         string
-	CumulativeRating uint64
+	MediaBase
+	CumulativeRating int32
 	NumberOfRatings  uint32
 	NumberOfTracks   uint32
-	ReleaseYear      uint32
-	Duration         time.Duration
-	Genres           []Genre `gorm:"foreignKey:MediaID"`
 }
 
 type MediaView struct {
@@ -25,22 +29,22 @@ type MediaView struct {
 }
 
 type MediaResult struct {
-	ID     uint
-	Title  string
-	Image  string
-	Rating float32
+	ID     uint    `json:"id"`
+	Title  string  `json:"title"`
+	Image  string  `json:"image"`
+	Rating float32 `json:"rating"`
 }
 
 type Filter struct {
-	Title        string
-	Category     string
-	Genres       []string
-	YearFrom     uint32
-	YearTo       uint32
-	DurationFrom time.Duration
-	DurationTo   time.Duration
-	RatingFrom   float32
-	RatingTo     float32
+	Title        string        `json:"title"`
+	Category     string        `json:"category"`
+	Genres       []string      `json:"genres"`
+	YearFrom     uint32        `json:"year_from"`
+	YearTo       uint32        `json:"year_to"`
+	DurationFrom time.Duration `json:"duration_from"`
+	DurationTo   time.Duration `json:"duration_to"`
+	RatingFrom   float32       `json:"rating_from"`
+	RatingTo     float32       `json:"rating_to"`
 }
 
 var Categories = helpers.MakeStringSet("Serials", "Movies", "Books", "Lectures")

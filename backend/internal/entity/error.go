@@ -11,3 +11,6 @@ var ErrUserAlreadyExists = errors.New("User already exists")
 var ErrMediaAlreadyExists = errors.New("Media already exists")
 var ErrCommentAlreadyExists = errors.New("Comment already exists")
 var ErrMediaTrackAlreadyExists = errors.New("MediaTrack already exists")
+
+var ErrEmptyAuthHeader = errors.New("empty auth header")
+var ErrInvalidAuthHeader = errors.New("invalid auth header")

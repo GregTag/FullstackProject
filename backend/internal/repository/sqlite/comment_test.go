@@ -117,7 +117,7 @@ func (suite *CommentTestSuite) TestDelete() {
 	suite.NoError(err)
 
 	// Delete the comment
-	err = suite.repo.Delete(comment.ID)
+	err = suite.repo.Delete(comment.ID, comment.SenderID)
 	suite.NoError(err)
 
 	// Attempt to retrieve the deleted comment from the database
@@ -131,7 +131,7 @@ func (suite *CommentTestSuite) TestDelete() {
 
 func (suite *CommentTestSuite) TestDelete_NotFound() {
 	// Attempt to delete a non-existent comment
-	err := suite.repo.Delete(100)
+	err := suite.repo.Delete(100, 100)
 
 	// Assert that the appropriate error is returned
 	suite.Equal(entity.ErrCommentNotFound, err)
@@ -148,7 +148,7 @@ func (suite *CommentTestSuite) TestLoad() {
 	suite.NoError(err)
 
 	// Call the Load method to retrieve the comment
-	loadedComment, err := suite.repo.Load(comment.ID)
+	loadedComment, err := suite.repo.Load(comment.ID, comment.SenderID)
 	suite.NoError(err)
 
 	// Assert that the loaded comment is not nil
@@ -163,7 +163,7 @@ func (suite *CommentTestSuite) TestLoad() {
 
 func (suite *CommentTestSuite) TestLoad_NotFound() {
 	// Attempt to load a non-existent comment
-	loadedComment, err := suite.repo.Load(100)
+	loadedComment, err := suite.repo.Load(100, 100)
 
 	// Assert that the appropriate error is returned
 	suite.Equal(entity.ErrCommentNotFound, err)

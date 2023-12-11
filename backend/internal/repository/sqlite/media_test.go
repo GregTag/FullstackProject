@@ -31,12 +31,16 @@ func (suite *MediaTestSuite) SetupTest() {
 
 func (suite *MediaTestSuite) TestCreate() {
 	// Prepare test data
-	media := &entity.Media{
+	media := &entity.Media{MediaBase: entity.MediaBase{
 		Title:       "Test Media 0",
 		Description: "Test Description 0",
 		Category:    "Serials",
 		ReleaseYear: 2020,
-	}
+		Genres: []entity.Genre{
+			{Genre: "Action"},
+			{Genre: "Adventure"},
+		},
+	}}
 
 	// Test Create method
 	err := suite.repo.Create(media)
@@ -52,12 +56,15 @@ func (suite *MediaTestSuite) TestCreate() {
 	suite.Equal(entity.ErrMediaAlreadyExists, err)
 
 	// Test creating media with different ID
-	media2 := &entity.Media{
+	media2 := &entity.Media{MediaBase: entity.MediaBase{
 		Title:       "Test Media 1",
 		Description: "Test Description 1",
 		Category:    "Movies",
 		ReleaseYear: 2021,
-	}
+		Genres: []entity.Genre{
+			{Genre: "Comedy"},
+		},
+	}}
 	err = suite.repo.Create(media2)
 	suite.NoError(err)
 
@@ -68,12 +75,15 @@ func (suite *MediaTestSuite) TestCreate() {
 }
 func (suite *MediaTestSuite) TestUpdate() {
 	// Prepare test data
-	media := &entity.Media{
+	media := &entity.Media{MediaBase: entity.MediaBase{
 		Title:       "Test Media",
 		Description: "Test Description",
 		Category:    "Movies",
 		ReleaseYear: 2022,
-	}
+		Genres: []entity.Genre{
+			{Genre: "Action"},
+		},
+	}}
 	err := suite.repo.Create(media)
 	suite.NoError(err)
 
@@ -82,6 +92,9 @@ func (suite *MediaTestSuite) TestUpdate() {
 	media.Description = "Updated Description"
 	media.Category = "Serials"
 	media.ReleaseYear = 2023
+	media.Genres = []entity.Genre{
+		{Genre: "Adventure"},
+	}
 	err = suite.repo.Update(media)
 	suite.NoError(err)
 
@@ -91,24 +104,24 @@ func (suite *MediaTestSuite) TestUpdate() {
 	suite.Equal(media, updatedMedia)
 
 	// Update non-existing media
-	nonExistingMedia := &entity.Media{
+	nonExistingMedia := &entity.Media{MediaBase: entity.MediaBase{
 		ID:          100,
 		Title:       "Non-existing Media",
 		Description: "Non-existing Description",
 		Category:    "Non-existing Category",
 		ReleaseYear: 2024,
-	}
+	}}
 	err = suite.repo.Update(nonExistingMedia)
 	suite.Equal(entity.ErrMediaNotFound, err)
 }
 func (suite *MediaTestSuite) TestDelete() {
 	// Prepare test data
-	media := &entity.Media{
+	media := &entity.Media{MediaBase: entity.MediaBase{
 		Title:       "Test Media",
 		Description: "Test Description",
 		Category:    "Movies",
 		ReleaseYear: 2022,
-	}
+	}}
 	err := suite.repo.Create(media)
 	suite.NoError(err)
 
@@ -126,12 +139,15 @@ func (suite *MediaTestSuite) TestDelete() {
 }
 func (suite *MediaTestSuite) TestGet() {
 	// Prepare test data
-	media := &entity.Media{
+	media := &entity.Media{MediaBase: entity.MediaBase{
 		Title:       "Test Media",
 		Description: "Test Description",
 		Category:    "Movies",
 		ReleaseYear: 2022,
-	}
+		Genres: []entity.Genre{
+			{Genre: "Action"},
+		},
+	}}
 	err := suite.repo.Create(media)
 	suite.NoError(err)
 
@@ -148,31 +164,31 @@ func (suite *MediaTestSuite) TestGet() {
 }
 func (suite *MediaTestSuite) TestSearch() {
 	// Prepare test data
-	media1 := &entity.Media{
-		Title:           "Untest Media 1",
-		Description:     "Test Description 1",
-		Category:        "Movies",
-		ReleaseYear:     2020,
+	media1 := &entity.Media{MediaBase: entity.MediaBase{
+		Title:       "Untest Media 1",
+		Description: "Test Description 1",
+		Category:    "Movies",
+		ReleaseYear: 2020},
 		NumberOfRatings: 1,
 	}
 	err := suite.repo.Create(media1)
 	suite.NoError(err)
 
-	media2 := &entity.Media{
-		Title:           "Untest Media 2",
-		Description:     "Test Description 2",
-		Category:        "Serials",
-		ReleaseYear:     2021,
+	media2 := &entity.Media{MediaBase: entity.MediaBase{
+		Title:       "Untest Media 2",
+		Description: "Test Description 2",
+		Category:    "Serials",
+		ReleaseYear: 2021},
 		NumberOfRatings: 1,
 	}
 	err = suite.repo.Create(media2)
 	suite.NoError(err)
 
-	media3 := &entity.Media{
-		Title:           "Untest Media 3",
-		Description:     "Test Description 3",
-		Category:        "Movies",
-		ReleaseYear:     2022,
+	media3 := &entity.Media{MediaBase: entity.MediaBase{
+		Title:       "Untest Media 3",
+		Description: "Test Description 3",
+		Category:    "Movies",
+		ReleaseYear: 2022},
 		NumberOfRatings: 1,
 	}
 	err = suite.repo.Create(media3)

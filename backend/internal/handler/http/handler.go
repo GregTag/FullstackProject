@@ -3,6 +3,7 @@ package handler
 import (
 	"backend/internal/entity"
 	"backend/internal/service"
+	"backend/pkg/auth"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -13,14 +14,16 @@ import (
 )
 
 type Handler struct {
+	auth              entity.AuthManager
 	userService       entity.UserService
 	mediaService      entity.MediaService
 	commentService    entity.CommentService
 	mediaTrackService entity.MediaTrackService
 }
 
-func NewHandler(s *service.Service) *Handler {
+func NewHandler(s *service.Service, auth *auth.AuthManager) *Handler {
 	return &Handler{
+		auth:              auth,
 		userService:       s.User,
 		mediaService:      s.Media,
 		commentService:    s.Comment,
