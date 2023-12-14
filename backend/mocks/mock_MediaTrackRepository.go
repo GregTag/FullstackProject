@@ -67,9 +67,9 @@ func (_c *MockMediaTrackRepository_Create_Call) RunAndReturn(run func(*entity.Me
 	return _c
 }
 
-// Delete provides a mock function with given fields: user_id, media_id
-func (_m *MockMediaTrackRepository) Delete(user_id uint, media_id uint) error {
-	ret := _m.Called(user_id, media_id)
+// Delete provides a mock function with given fields: userID, mediaID
+func (_m *MockMediaTrackRepository) Delete(userID uint, mediaID uint) error {
+	ret := _m.Called(userID, mediaID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Delete")
@@ -77,7 +77,7 @@ func (_m *MockMediaTrackRepository) Delete(user_id uint, media_id uint) error {
 
 	var r0 error
 	if rf, ok := ret.Get(0).(func(uint, uint) error); ok {
-		r0 = rf(user_id, media_id)
+		r0 = rf(userID, mediaID)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -91,13 +91,13 @@ type MockMediaTrackRepository_Delete_Call struct {
 }
 
 // Delete is a helper method to define mock.On call
-//   - user_id uint
-//   - media_id uint
-func (_e *MockMediaTrackRepository_Expecter) Delete(user_id interface{}, media_id interface{}) *MockMediaTrackRepository_Delete_Call {
-	return &MockMediaTrackRepository_Delete_Call{Call: _e.mock.On("Delete", user_id, media_id)}
+//   - userID uint
+//   - mediaID uint
+func (_e *MockMediaTrackRepository_Expecter) Delete(userID interface{}, mediaID interface{}) *MockMediaTrackRepository_Delete_Call {
+	return &MockMediaTrackRepository_Delete_Call{Call: _e.mock.On("Delete", userID, mediaID)}
 }
 
-func (_c *MockMediaTrackRepository_Delete_Call) Run(run func(user_id uint, media_id uint)) *MockMediaTrackRepository_Delete_Call {
+func (_c *MockMediaTrackRepository_Delete_Call) Run(run func(userID uint, mediaID uint)) *MockMediaTrackRepository_Delete_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(uint), args[1].(uint))
 	})
@@ -114,9 +114,9 @@ func (_c *MockMediaTrackRepository_Delete_Call) RunAndReturn(run func(uint, uint
 	return _c
 }
 
-// Get provides a mock function with given fields: user_id, media_id
-func (_m *MockMediaTrackRepository) Get(user_id uint, media_id uint) (*entity.MediaTrack, error) {
-	ret := _m.Called(user_id, media_id)
+// Get provides a mock function with given fields: userID, mediaID
+func (_m *MockMediaTrackRepository) Get(userID uint, mediaID uint) (*entity.MediaTrack, error) {
+	ret := _m.Called(userID, mediaID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Get")
@@ -125,10 +125,10 @@ func (_m *MockMediaTrackRepository) Get(user_id uint, media_id uint) (*entity.Me
 	var r0 *entity.MediaTrack
 	var r1 error
 	if rf, ok := ret.Get(0).(func(uint, uint) (*entity.MediaTrack, error)); ok {
-		return rf(user_id, media_id)
+		return rf(userID, mediaID)
 	}
 	if rf, ok := ret.Get(0).(func(uint, uint) *entity.MediaTrack); ok {
-		r0 = rf(user_id, media_id)
+		r0 = rf(userID, mediaID)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*entity.MediaTrack)
@@ -136,7 +136,7 @@ func (_m *MockMediaTrackRepository) Get(user_id uint, media_id uint) (*entity.Me
 	}
 
 	if rf, ok := ret.Get(1).(func(uint, uint) error); ok {
-		r1 = rf(user_id, media_id)
+		r1 = rf(userID, mediaID)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -150,13 +150,13 @@ type MockMediaTrackRepository_Get_Call struct {
 }
 
 // Get is a helper method to define mock.On call
-//   - user_id uint
-//   - media_id uint
-func (_e *MockMediaTrackRepository_Expecter) Get(user_id interface{}, media_id interface{}) *MockMediaTrackRepository_Get_Call {
-	return &MockMediaTrackRepository_Get_Call{Call: _e.mock.On("Get", user_id, media_id)}
+//   - userID uint
+//   - mediaID uint
+func (_e *MockMediaTrackRepository_Expecter) Get(userID interface{}, mediaID interface{}) *MockMediaTrackRepository_Get_Call {
+	return &MockMediaTrackRepository_Get_Call{Call: _e.mock.On("Get", userID, mediaID)}
 }
 
-func (_c *MockMediaTrackRepository_Get_Call) Run(run func(user_id uint, media_id uint)) *MockMediaTrackRepository_Get_Call {
+func (_c *MockMediaTrackRepository_Get_Call) Run(run func(userID uint, mediaID uint)) *MockMediaTrackRepository_Get_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(uint), args[1].(uint))
 	})
@@ -173,9 +173,9 @@ func (_c *MockMediaTrackRepository_Get_Call) RunAndReturn(run func(uint, uint) (
 	return _c
 }
 
-// LoadAll provides a mock function with given fields: user_id
-func (_m *MockMediaTrackRepository) LoadAll(user_id uint) (*[]entity.MediaTrackView, error) {
-	ret := _m.Called(user_id)
+// LoadAll provides a mock function with given fields: userID
+func (_m *MockMediaTrackRepository) LoadAll(userID uint) (*[]entity.MediaTrackView, error) {
+	ret := _m.Called(userID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for LoadAll")
@@ -184,10 +184,10 @@ func (_m *MockMediaTrackRepository) LoadAll(user_id uint) (*[]entity.MediaTrackV
 	var r0 *[]entity.MediaTrackView
 	var r1 error
 	if rf, ok := ret.Get(0).(func(uint) (*[]entity.MediaTrackView, error)); ok {
-		return rf(user_id)
+		return rf(userID)
 	}
 	if rf, ok := ret.Get(0).(func(uint) *[]entity.MediaTrackView); ok {
-		r0 = rf(user_id)
+		r0 = rf(userID)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*[]entity.MediaTrackView)
@@ -195,7 +195,7 @@ func (_m *MockMediaTrackRepository) LoadAll(user_id uint) (*[]entity.MediaTrackV
 	}
 
 	if rf, ok := ret.Get(1).(func(uint) error); ok {
-		r1 = rf(user_id)
+		r1 = rf(userID)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -209,12 +209,12 @@ type MockMediaTrackRepository_LoadAll_Call struct {
 }
 
 // LoadAll is a helper method to define mock.On call
-//   - user_id uint
-func (_e *MockMediaTrackRepository_Expecter) LoadAll(user_id interface{}) *MockMediaTrackRepository_LoadAll_Call {
-	return &MockMediaTrackRepository_LoadAll_Call{Call: _e.mock.On("LoadAll", user_id)}
+//   - userID uint
+func (_e *MockMediaTrackRepository_Expecter) LoadAll(userID interface{}) *MockMediaTrackRepository_LoadAll_Call {
+	return &MockMediaTrackRepository_LoadAll_Call{Call: _e.mock.On("LoadAll", userID)}
 }
 
-func (_c *MockMediaTrackRepository_LoadAll_Call) Run(run func(user_id uint)) *MockMediaTrackRepository_LoadAll_Call {
+func (_c *MockMediaTrackRepository_LoadAll_Call) Run(run func(userID uint)) *MockMediaTrackRepository_LoadAll_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(uint))
 	})

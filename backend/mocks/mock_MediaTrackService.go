@@ -67,9 +67,9 @@ func (_c *MockMediaTrackService_Change_Call) RunAndReturn(run func(*entity.Media
 	return _c
 }
 
-// LoadAll provides a mock function with given fields: user_id
-func (_m *MockMediaTrackService) LoadAll(user_id uint) (*[]entity.MediaTrackView, error) {
-	ret := _m.Called(user_id)
+// LoadAll provides a mock function with given fields: userID
+func (_m *MockMediaTrackService) LoadAll(userID uint) (*[]entity.MediaTrackView, error) {
+	ret := _m.Called(userID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for LoadAll")
@@ -78,10 +78,10 @@ func (_m *MockMediaTrackService) LoadAll(user_id uint) (*[]entity.MediaTrackView
 	var r0 *[]entity.MediaTrackView
 	var r1 error
 	if rf, ok := ret.Get(0).(func(uint) (*[]entity.MediaTrackView, error)); ok {
-		return rf(user_id)
+		return rf(userID)
 	}
 	if rf, ok := ret.Get(0).(func(uint) *[]entity.MediaTrackView); ok {
-		r0 = rf(user_id)
+		r0 = rf(userID)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*[]entity.MediaTrackView)
@@ -89,7 +89,7 @@ func (_m *MockMediaTrackService) LoadAll(user_id uint) (*[]entity.MediaTrackView
 	}
 
 	if rf, ok := ret.Get(1).(func(uint) error); ok {
-		r1 = rf(user_id)
+		r1 = rf(userID)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -103,12 +103,12 @@ type MockMediaTrackService_LoadAll_Call struct {
 }
 
 // LoadAll is a helper method to define mock.On call
-//   - user_id uint
-func (_e *MockMediaTrackService_Expecter) LoadAll(user_id interface{}) *MockMediaTrackService_LoadAll_Call {
-	return &MockMediaTrackService_LoadAll_Call{Call: _e.mock.On("LoadAll", user_id)}
+//   - userID uint
+func (_e *MockMediaTrackService_Expecter) LoadAll(userID interface{}) *MockMediaTrackService_LoadAll_Call {
+	return &MockMediaTrackService_LoadAll_Call{Call: _e.mock.On("LoadAll", userID)}
 }
 
-func (_c *MockMediaTrackService_LoadAll_Call) Run(run func(user_id uint)) *MockMediaTrackService_LoadAll_Call {
+func (_c *MockMediaTrackService_LoadAll_Call) Run(run func(userID uint)) *MockMediaTrackService_LoadAll_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(uint))
 	})
@@ -171,9 +171,9 @@ func (_c *MockMediaTrackService_Track_Call) RunAndReturn(run func(*entity.MediaT
 	return _c
 }
 
-// Untrack provides a mock function with given fields: user_id, media_id
-func (_m *MockMediaTrackService) Untrack(user_id uint, media_id uint) error {
-	ret := _m.Called(user_id, media_id)
+// Untrack provides a mock function with given fields: userID, mediaID
+func (_m *MockMediaTrackService) Untrack(userID uint, mediaID uint) error {
+	ret := _m.Called(userID, mediaID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Untrack")
@@ -181,7 +181,7 @@ func (_m *MockMediaTrackService) Untrack(user_id uint, media_id uint) error {
 
 	var r0 error
 	if rf, ok := ret.Get(0).(func(uint, uint) error); ok {
-		r0 = rf(user_id, media_id)
+		r0 = rf(userID, mediaID)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -195,13 +195,13 @@ type MockMediaTrackService_Untrack_Call struct {
 }
 
 // Untrack is a helper method to define mock.On call
-//   - user_id uint
-//   - media_id uint
-func (_e *MockMediaTrackService_Expecter) Untrack(user_id interface{}, media_id interface{}) *MockMediaTrackService_Untrack_Call {
-	return &MockMediaTrackService_Untrack_Call{Call: _e.mock.On("Untrack", user_id, media_id)}
+//   - userID uint
+//   - mediaID uint
+func (_e *MockMediaTrackService_Expecter) Untrack(userID interface{}, mediaID interface{}) *MockMediaTrackService_Untrack_Call {
+	return &MockMediaTrackService_Untrack_Call{Call: _e.mock.On("Untrack", userID, mediaID)}
 }
 
-func (_c *MockMediaTrackService_Untrack_Call) Run(run func(user_id uint, media_id uint)) *MockMediaTrackService_Untrack_Call {
+func (_c *MockMediaTrackService_Untrack_Call) Run(run func(userID uint, mediaID uint)) *MockMediaTrackService_Untrack_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(uint), args[1].(uint))
 	})

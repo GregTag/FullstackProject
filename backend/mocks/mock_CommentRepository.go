@@ -22,7 +22,7 @@ func (_m *MockCommentRepository) EXPECT() *MockCommentRepository_Expecter {
 }
 
 // Create provides a mock function with given fields: _a0
-func (_m *MockCommentRepository) Create(_a0 *entity.CommentBase) error {
+func (_m *MockCommentRepository) Create(_a0 *entity.Comment) error {
 	ret := _m.Called(_a0)
 
 	if len(ret) == 0 {
@@ -30,7 +30,7 @@ func (_m *MockCommentRepository) Create(_a0 *entity.CommentBase) error {
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(*entity.CommentBase) error); ok {
+	if rf, ok := ret.Get(0).(func(*entity.Comment) error); ok {
 		r0 = rf(_a0)
 	} else {
 		r0 = ret.Error(0)
@@ -45,14 +45,14 @@ type MockCommentRepository_Create_Call struct {
 }
 
 // Create is a helper method to define mock.On call
-//   - _a0 *entity.CommentBase
+//   - _a0 *entity.Comment
 func (_e *MockCommentRepository_Expecter) Create(_a0 interface{}) *MockCommentRepository_Create_Call {
 	return &MockCommentRepository_Create_Call{Call: _e.mock.On("Create", _a0)}
 }
 
-func (_c *MockCommentRepository_Create_Call) Run(run func(_a0 *entity.CommentBase)) *MockCommentRepository_Create_Call {
+func (_c *MockCommentRepository_Create_Call) Run(run func(_a0 *entity.Comment)) *MockCommentRepository_Create_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(*entity.CommentBase))
+		run(args[0].(*entity.Comment))
 	})
 	return _c
 }
@@ -62,22 +62,22 @@ func (_c *MockCommentRepository_Create_Call) Return(_a0 error) *MockCommentRepos
 	return _c
 }
 
-func (_c *MockCommentRepository_Create_Call) RunAndReturn(run func(*entity.CommentBase) error) *MockCommentRepository_Create_Call {
+func (_c *MockCommentRepository_Create_Call) RunAndReturn(run func(*entity.Comment) error) *MockCommentRepository_Create_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// Delete provides a mock function with given fields: id
-func (_m *MockCommentRepository) Delete(id uint) error {
-	ret := _m.Called(id)
+// Delete provides a mock function with given fields: id, senderID
+func (_m *MockCommentRepository) Delete(id uint, senderID uint) error {
+	ret := _m.Called(id, senderID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Delete")
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(uint) error); ok {
-		r0 = rf(id)
+	if rf, ok := ret.Get(0).(func(uint, uint) error); ok {
+		r0 = rf(id, senderID)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -92,13 +92,14 @@ type MockCommentRepository_Delete_Call struct {
 
 // Delete is a helper method to define mock.On call
 //   - id uint
-func (_e *MockCommentRepository_Expecter) Delete(id interface{}) *MockCommentRepository_Delete_Call {
-	return &MockCommentRepository_Delete_Call{Call: _e.mock.On("Delete", id)}
+//   - senderID uint
+func (_e *MockCommentRepository_Expecter) Delete(id interface{}, senderID interface{}) *MockCommentRepository_Delete_Call {
+	return &MockCommentRepository_Delete_Call{Call: _e.mock.On("Delete", id, senderID)}
 }
 
-func (_c *MockCommentRepository_Delete_Call) Run(run func(id uint)) *MockCommentRepository_Delete_Call {
+func (_c *MockCommentRepository_Delete_Call) Run(run func(id uint, senderID uint)) *MockCommentRepository_Delete_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(uint))
+		run(args[0].(uint), args[1].(uint))
 	})
 	return _c
 }
@@ -108,14 +109,14 @@ func (_c *MockCommentRepository_Delete_Call) Return(_a0 error) *MockCommentRepos
 	return _c
 }
 
-func (_c *MockCommentRepository_Delete_Call) RunAndReturn(run func(uint) error) *MockCommentRepository_Delete_Call {
+func (_c *MockCommentRepository_Delete_Call) RunAndReturn(run func(uint, uint) error) *MockCommentRepository_Delete_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// Load provides a mock function with given fields: id
-func (_m *MockCommentRepository) Load(id uint) (*entity.CommentView, error) {
-	ret := _m.Called(id)
+// Load provides a mock function with given fields: id, senderID
+func (_m *MockCommentRepository) Load(id uint, senderID uint) (*entity.CommentView, error) {
+	ret := _m.Called(id, senderID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Load")
@@ -123,19 +124,19 @@ func (_m *MockCommentRepository) Load(id uint) (*entity.CommentView, error) {
 
 	var r0 *entity.CommentView
 	var r1 error
-	if rf, ok := ret.Get(0).(func(uint) (*entity.CommentView, error)); ok {
-		return rf(id)
+	if rf, ok := ret.Get(0).(func(uint, uint) (*entity.CommentView, error)); ok {
+		return rf(id, senderID)
 	}
-	if rf, ok := ret.Get(0).(func(uint) *entity.CommentView); ok {
-		r0 = rf(id)
+	if rf, ok := ret.Get(0).(func(uint, uint) *entity.CommentView); ok {
+		r0 = rf(id, senderID)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*entity.CommentView)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(uint) error); ok {
-		r1 = rf(id)
+	if rf, ok := ret.Get(1).(func(uint, uint) error); ok {
+		r1 = rf(id, senderID)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -150,13 +151,14 @@ type MockCommentRepository_Load_Call struct {
 
 // Load is a helper method to define mock.On call
 //   - id uint
-func (_e *MockCommentRepository_Expecter) Load(id interface{}) *MockCommentRepository_Load_Call {
-	return &MockCommentRepository_Load_Call{Call: _e.mock.On("Load", id)}
+//   - senderID uint
+func (_e *MockCommentRepository_Expecter) Load(id interface{}, senderID interface{}) *MockCommentRepository_Load_Call {
+	return &MockCommentRepository_Load_Call{Call: _e.mock.On("Load", id, senderID)}
 }
 
-func (_c *MockCommentRepository_Load_Call) Run(run func(id uint)) *MockCommentRepository_Load_Call {
+func (_c *MockCommentRepository_Load_Call) Run(run func(id uint, senderID uint)) *MockCommentRepository_Load_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(uint))
+		run(args[0].(uint), args[1].(uint))
 	})
 	return _c
 }
@@ -166,14 +168,14 @@ func (_c *MockCommentRepository_Load_Call) Return(_a0 *entity.CommentView, _a1 e
 	return _c
 }
 
-func (_c *MockCommentRepository_Load_Call) RunAndReturn(run func(uint) (*entity.CommentView, error)) *MockCommentRepository_Load_Call {
+func (_c *MockCommentRepository_Load_Call) RunAndReturn(run func(uint, uint) (*entity.CommentView, error)) *MockCommentRepository_Load_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// LoadAll provides a mock function with given fields: media_id
-func (_m *MockCommentRepository) LoadAll(media_id uint) (*[]entity.CommentView, error) {
-	ret := _m.Called(media_id)
+// LoadAll provides a mock function with given fields: mediaID
+func (_m *MockCommentRepository) LoadAll(mediaID uint) (*[]entity.CommentView, error) {
+	ret := _m.Called(mediaID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for LoadAll")
@@ -182,10 +184,10 @@ func (_m *MockCommentRepository) LoadAll(media_id uint) (*[]entity.CommentView, 
 	var r0 *[]entity.CommentView
 	var r1 error
 	if rf, ok := ret.Get(0).(func(uint) (*[]entity.CommentView, error)); ok {
-		return rf(media_id)
+		return rf(mediaID)
 	}
 	if rf, ok := ret.Get(0).(func(uint) *[]entity.CommentView); ok {
-		r0 = rf(media_id)
+		r0 = rf(mediaID)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*[]entity.CommentView)
@@ -193,7 +195,7 @@ func (_m *MockCommentRepository) LoadAll(media_id uint) (*[]entity.CommentView, 
 	}
 
 	if rf, ok := ret.Get(1).(func(uint) error); ok {
-		r1 = rf(media_id)
+		r1 = rf(mediaID)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -207,12 +209,12 @@ type MockCommentRepository_LoadAll_Call struct {
 }
 
 // LoadAll is a helper method to define mock.On call
-//   - media_id uint
-func (_e *MockCommentRepository_Expecter) LoadAll(media_id interface{}) *MockCommentRepository_LoadAll_Call {
-	return &MockCommentRepository_LoadAll_Call{Call: _e.mock.On("LoadAll", media_id)}
+//   - mediaID uint
+func (_e *MockCommentRepository_Expecter) LoadAll(mediaID interface{}) *MockCommentRepository_LoadAll_Call {
+	return &MockCommentRepository_LoadAll_Call{Call: _e.mock.On("LoadAll", mediaID)}
 }
 
-func (_c *MockCommentRepository_LoadAll_Call) Run(run func(media_id uint)) *MockCommentRepository_LoadAll_Call {
+func (_c *MockCommentRepository_LoadAll_Call) Run(run func(mediaID uint)) *MockCommentRepository_LoadAll_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(uint))
 	})
@@ -230,7 +232,7 @@ func (_c *MockCommentRepository_LoadAll_Call) RunAndReturn(run func(uint) (*[]en
 }
 
 // Update provides a mock function with given fields: _a0
-func (_m *MockCommentRepository) Update(_a0 *entity.CommentBase) error {
+func (_m *MockCommentRepository) Update(_a0 *entity.Comment) error {
 	ret := _m.Called(_a0)
 
 	if len(ret) == 0 {
@@ -238,7 +240,7 @@ func (_m *MockCommentRepository) Update(_a0 *entity.CommentBase) error {
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(*entity.CommentBase) error); ok {
+	if rf, ok := ret.Get(0).(func(*entity.Comment) error); ok {
 		r0 = rf(_a0)
 	} else {
 		r0 = ret.Error(0)
@@ -253,14 +255,14 @@ type MockCommentRepository_Update_Call struct {
 }
 
 // Update is a helper method to define mock.On call
-//   - _a0 *entity.CommentBase
+//   - _a0 *entity.Comment
 func (_e *MockCommentRepository_Expecter) Update(_a0 interface{}) *MockCommentRepository_Update_Call {
 	return &MockCommentRepository_Update_Call{Call: _e.mock.On("Update", _a0)}
 }
 
-func (_c *MockCommentRepository_Update_Call) Run(run func(_a0 *entity.CommentBase)) *MockCommentRepository_Update_Call {
+func (_c *MockCommentRepository_Update_Call) Run(run func(_a0 *entity.Comment)) *MockCommentRepository_Update_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(*entity.CommentBase))
+		run(args[0].(*entity.Comment))
 	})
 	return _c
 }
@@ -270,7 +272,7 @@ func (_c *MockCommentRepository_Update_Call) Return(_a0 error) *MockCommentRepos
 	return _c
 }
 
-func (_c *MockCommentRepository_Update_Call) RunAndReturn(run func(*entity.CommentBase) error) *MockCommentRepository_Update_Call {
+func (_c *MockCommentRepository_Update_Call) RunAndReturn(run func(*entity.Comment) error) *MockCommentRepository_Update_Call {
 	_c.Call.Return(run)
 	return _c
 }
