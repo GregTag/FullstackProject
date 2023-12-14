@@ -18,11 +18,11 @@ import (
 var wait = time.Second * 15
 
 func main() {
-	db_path := flag.String("db", "umo.db", "Path to SQLite database")
-	jwt_key_path := flag.String("jwt", "jwt.key", "Path to JWT key")
+	dbPath := flag.String("db", "umo.db", "Path to SQLite database")
+	jwtKeyPath := flag.String("jwt", "jwt.key", "Path to JWT key")
 	flag.Parse()
 
-	db, err := repository_sqlite.NewSQLiteDB(*db_path)
+	db, err := repository_sqlite.NewSQLiteDB(*dbPath)
 	if err != nil {
 		log.Panicf("Failed to initialize database: %s\n", err.Error())
 	} else {
@@ -31,7 +31,7 @@ func main() {
 	repository := repository.NewRepository(db)
 	service := service.NewService(repository)
 
-	signingKey, err := os.ReadFile(*jwt_key_path)
+	signingKey, err := os.ReadFile(*jwtKeyPath)
 	if err != nil {
 		log.Panicf("Failed to read JWT key: %s\n", err.Error())
 	}

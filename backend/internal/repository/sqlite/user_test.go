@@ -51,6 +51,7 @@ func (suite *UserTestSuite) TestCreate() {
 	// Assert that the user was created successfully
 	var createdUser entity.User
 	result := suite.db.First(&createdUser, user.ID)
+	createdUser.CreatedAt = createdUser.CreatedAt.Local()
 	suite.NoError(result.Error)
 	suite.Equal(user, &createdUser)
 
@@ -152,6 +153,7 @@ func (suite *UserTestSuite) TestGet() {
 
 	// Call the Get method to retrieve the user
 	retrievedUser, err := suite.repo.Get(user.ID)
+	retrievedUser.CreatedAt = retrievedUser.CreatedAt.Local()
 
 	// Assert that there are no errors
 	suite.NoError(err)
@@ -185,6 +187,7 @@ func (suite *UserTestSuite) TestGetByLogin() {
 
 	// Call the GetByLogin method to retrieve the user
 	retrievedUser, err := suite.repo.GetByLogin(user.Login)
+	retrievedUser.CreatedAt = retrievedUser.CreatedAt.Local()
 
 	// Assert that there are no errors
 	suite.NoError(err)
@@ -218,15 +221,17 @@ func (suite *UserTestSuite) TestGetViewByLogin() {
 
 	// Call the GetViewByLogin method to retrieve the user view
 	retrievedUserView, err := suite.repo.GetViewByLogin(user.Login)
+	retrievedUserView.CreatedAt = retrievedUserView.CreatedAt.Local()
 
 	// Assert that there are no errors
 	suite.NoError(err)
 
 	// Assert that the retrieved user view matches the original user
 	expectedUserView := &entity.UserView{
-		ID:       user.ID,
-		Login:    user.Login,
-		Fullname: user.Fullname,
+		ID:        user.ID,
+		Login:     user.Login,
+		Fullname:  user.Fullname,
+		CreatedAt: user.CreatedAt,
 	}
 	suite.Equal(expectedUserView, retrievedUserView)
 

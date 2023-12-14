@@ -17,31 +17,31 @@ func NewMediaTrackService(mediaTrackRepository entity.MediaTrackRepository) *Med
 }
 
 func (s *MediaTrackService) Track(track *entity.MediaTrackBase) error {
-	media_track := entity.MediaTrack{MediaTrackBase: *track}
-	err := s.mediaTrackRepository.Create(&media_track)
+	mediaTrack := entity.MediaTrack{MediaTrackBase: *track}
+	err := s.mediaTrackRepository.Create(&mediaTrack)
 	if err != nil {
 		return err
 	}
-	err = copier.Copy(track, &media_track)
+	err = copier.Copy(track, &mediaTrack)
 	return err
 }
 
 func (s *MediaTrackService) Change(track *entity.MediaTrackBase) error {
-	media_track := entity.MediaTrack{MediaTrackBase: *track}
-	err := s.mediaTrackRepository.Update(&media_track)
+	mediaTrack := entity.MediaTrack{MediaTrackBase: *track}
+	err := s.mediaTrackRepository.Update(&mediaTrack)
 	if err != nil {
 		return err
 	}
-	err = copier.Copy(track, &media_track)
+	err = copier.Copy(track, &mediaTrack)
 	return err
 }
 
-func (s *MediaTrackService) Untrack(user_id uint, media_id uint) error {
-	err := s.mediaTrackRepository.Delete(user_id, media_id)
+func (s *MediaTrackService) Untrack(userID uint, mediaID uint) error {
+	err := s.mediaTrackRepository.Delete(userID, mediaID)
 	return err
 }
 
-func (s *MediaTrackService) LoadAll(user_id uint) (*[]entity.MediaTrackView, error) {
-	tracks, err := s.mediaTrackRepository.LoadAll(user_id)
+func (s *MediaTrackService) LoadAll(userID uint) (*[]entity.MediaTrackView, error) {
+	tracks, err := s.mediaTrackRepository.LoadAll(userID)
 	return tracks, err
 }

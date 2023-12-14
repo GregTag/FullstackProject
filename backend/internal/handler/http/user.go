@@ -10,12 +10,12 @@ import (
 )
 
 func (h *Handler) userRegister(w http.ResponseWriter, r *http.Request) {
-	var user_reg entity.UserRegister
-	if parseBody(w, r, &user_reg) != nil {
+	var userReg entity.UserRegister
+	if parseBody(w, r, &userReg) != nil {
 		return
 	}
 
-	info, err := h.userService.Register(&user_reg)
+	info, err := h.userService.Register(&userReg)
 	switch {
 	case errors.Is(err, entity.ErrUserAlreadyExists):
 		jsend.Error(w, err.Error(), http.StatusConflict)
@@ -30,12 +30,12 @@ func (h *Handler) userRegister(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) userLogin(w http.ResponseWriter, r *http.Request) {
-	var user_login entity.UserLogin
-	if parseBody(w, r, &user_login) != nil {
+	var userLogin entity.UserLogin
+	if parseBody(w, r, &userLogin) != nil {
 		return
 	}
 
-	info, err := h.userService.Login(&user_login)
+	info, err := h.userService.Login(&userLogin)
 	switch {
 	case errors.Is(err, entity.ErrUserNotFound):
 		jsend.Error(w, err.Error(), http.StatusNotFound)
@@ -49,8 +49,8 @@ func (h *Handler) userLogin(w http.ResponseWriter, r *http.Request) {
 	jsend.Success(w, info, http.StatusOK)
 }
 
-func (h *Handler) provideAuthHeader(w http.ResponseWriter, user_id uint) bool {
-	token, err := h.auth.MakeToken(user_id)
+func (h *Handler) provideAuthHeader(w http.ResponseWriter, userID uint) bool {
+	token, err := h.auth.MakeToken(userID)
 	if err != nil {
 		jsend.Error(w, err.Error(), http.StatusInternalServerError)
 		log.Println("auth header: ", err.Error())
@@ -70,20 +70,20 @@ func (h *Handler) userLogout(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) userEdit(w http.ResponseWriter, r *http.Request) {
-	user_id, verified := h.checkAuth(w, r)
+	userID, verified := h.checkAuth(w, r)
 	if !verified {
 		return
 	}
 
-	var user_edit map[string]string
-	if parseBody(w, r, &user_edit) != nil {
+	var userEdit map[string]string
+	if parseBody(w, r, &userEdit) != nil {
 		return
 	}
 
 	view := entity.UserView{
-		ID:       user_id,
-		Fullname: user_edit["fullname"],
-		Avatar:   user_edit["avatar"],
+		ID:       userID,
+		Fullname: userEdit["fullname"],
+		Avatar:   userEdit["avatar"],
 	}
 
 	err := h.userService.Change(&view)

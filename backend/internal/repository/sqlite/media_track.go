@@ -91,9 +91,9 @@ func (r *MediaTrackSQLite) Update(track *entity.MediaTrack) error {
 	return err
 }
 
-func (r *MediaTrackSQLite) Delete(user_id uint, media_id uint) error {
+func (r *MediaTrackSQLite) Delete(userID uint, mediaID uint) error {
 	err := r.db.Transaction(func(tx *gorm.DB) error {
-		track, err := getImpl(tx, user_id, media_id)
+		track, err := getImpl(tx, userID, mediaID)
 		if err != nil {
 			return err
 		}
@@ -121,14 +121,14 @@ func (r *MediaTrackSQLite) Delete(user_id uint, media_id uint) error {
 	return err
 }
 
-func (r *MediaTrackSQLite) Get(user_id uint, media_id uint) (*entity.MediaTrack, error) {
-	return getImpl(r.db, user_id, media_id)
+func (r *MediaTrackSQLite) Get(userID uint, mediaID uint) (*entity.MediaTrack, error) {
+	return getImpl(r.db, userID, mediaID)
 }
 
-func getImpl(db *gorm.DB, user_id uint, media_id uint) (*entity.MediaTrack, error) {
+func getImpl(db *gorm.DB, userID uint, mediaID uint) (*entity.MediaTrack, error) {
 	var track entity.MediaTrack
 
-	result := db.Model(&entity.MediaTrack{}).Preload("Media").Where("user_id = ? AND media_id = ?", user_id, media_id).First(&track)
+	result := db.Model(&entity.MediaTrack{}).Preload("Media").Where("user_id = ? AND media_id = ?", userID, mediaID).First(&track)
 	if result.Error == nil {
 		return &track, nil
 	} else if errors.Is(result.Error, gorm.ErrRecordNotFound) {
@@ -138,10 +138,10 @@ func getImpl(db *gorm.DB, user_id uint, media_id uint) (*entity.MediaTrack, erro
 	}
 }
 
-func (r *MediaTrackSQLite) LoadAll(user_id uint) (*[]entity.MediaTrackView, error) {
+func (r *MediaTrackSQLite) LoadAll(userID uint) (*[]entity.MediaTrackView, error) {
 	var tracks []entity.MediaTrackView
 
-	result := r.db.Table("media_tracks").Select("media_tracks.*, media.title as media_title").Joins("JOIN media ON media_tracks.media_id = media.id").Where("media_tracks.user_id = ?", user_id).Scan(&tracks)
+	result := r.db.Table("media_tracks").Select("media_tracks.*, media.title as media_title").Joins("JOIN media ON media_tracks.media_id = media.id").Where("media_tracks.user_id = ?", userID).Scan(&tracks)
 	if result.Error != nil {
 		return nil, result.Error
 	} else {

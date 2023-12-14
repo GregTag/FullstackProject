@@ -10,7 +10,7 @@ import (
 )
 
 func (h *Handler) commentAdd(w http.ResponseWriter, r *http.Request) {
-	user_id, verified := h.checkAuth(w, r)
+	userID, verified := h.checkAuth(w, r)
 	if !verified {
 		return
 	}
@@ -19,7 +19,7 @@ func (h *Handler) commentAdd(w http.ResponseWriter, r *http.Request) {
 	if parseBody(w, r, &data) != nil {
 		return
 	}
-	media_id, ok1 := data["media_id"].(float64)
+	mediaID, ok1 := data["media_id"].(float64)
 	content, ok2 := data["content"].(string)
 	if !ok1 || !ok2 {
 		jsend.Error(w, "invalid comment", http.StatusBadRequest)
@@ -27,8 +27,8 @@ func (h *Handler) commentAdd(w http.ResponseWriter, r *http.Request) {
 	}
 
 	comment := entity.CommentBase{
-		SenderID: user_id,
-		MediaID:  uint(media_id),
+		SenderID: userID,
+		MediaID:  uint(mediaID),
 		Content:  content,
 	}
 
@@ -44,7 +44,7 @@ func (h *Handler) commentAdd(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) commentEdit(w http.ResponseWriter, r *http.Request) {
-	user_id, verified := h.checkAuth(w, r)
+	userID, verified := h.checkAuth(w, r)
 	if !verified {
 		return
 	}
@@ -63,7 +63,7 @@ func (h *Handler) commentEdit(w http.ResponseWriter, r *http.Request) {
 
 	comment := entity.CommentBase{
 		ID:       uint(id),
-		SenderID: user_id,
+		SenderID: userID,
 		Content:  content,
 	}
 
@@ -82,7 +82,7 @@ func (h *Handler) commentEdit(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) commentDelete(w http.ResponseWriter, r *http.Request) {
-	user_id, verified := h.checkAuth(w, r)
+	userID, verified := h.checkAuth(w, r)
 	if !verified {
 		return
 	}
@@ -92,7 +92,7 @@ func (h *Handler) commentDelete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := h.commentService.Delete(id, user_id)
+	err := h.commentService.Delete(id, userID)
 	switch {
 	case errors.Is(err, entity.ErrCommentNotFound):
 		jsend.Error(w, err.Error(), http.StatusNotFound)

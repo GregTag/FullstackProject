@@ -38,12 +38,12 @@ func (s *CommentService) Edit(base *entity.CommentBase) (*entity.CommentView, er
 	return view, nil
 }
 
-func (s *CommentService) Delete(id, sender_id uint) error {
-	err := s.commentRepository.Delete(id, sender_id)
+func (s *CommentService) Delete(id, senderID uint) error {
+	err := s.commentRepository.Delete(id, senderID)
 	return err
 }
 
-func (s *CommentService) LoadAll(media_id uint) (*[]entity.CommentView, error) {
-	comments, err := s.commentRepository.LoadAll(media_id)
+func (s *CommentService) LoadAll(mediaID uint) (*[]entity.CommentView, error) {
+	comments, err := s.commentRepository.LoadAll(mediaID)
 	return comments, err
 }

@@ -19,7 +19,7 @@ func NewUserService(userRepository entity.UserRepository) *UserService {
 	}
 }
 
-func checkCredentials(user_reg *entity.UserRegister) error {
+func checkCredentials(userReg *entity.UserRegister) error {
 	return nil
 }
 
@@ -34,19 +34,19 @@ func (s *UserService) userToInfo(user *entity.User) (*entity.UserInfo, error) {
 	return info, err
 }
 
-func (s *UserService) Register(user_reg *entity.UserRegister) (*entity.UserInfo, error) {
-	err := checkCredentials(user_reg)
+func (s *UserService) Register(userReg *entity.UserRegister) (*entity.UserInfo, error) {
+	err := checkCredentials(userReg)
 	if err != nil {
 		return nil, err
 	}
 
-	passwordHash, err := helpers.GeneratePasswordHash(user_reg.Password)
+	passwordHash, err := helpers.GeneratePasswordHash(userReg.Password)
 	if err != nil {
 		return nil, err
 	}
-	user_reg.Password = passwordHash
+	userReg.Password = passwordHash
 
-	user := entity.User{UserRegister: *user_reg, LastLoginAt: time.Now()}
+	user := entity.User{UserRegister: *userReg, LastLoginAt: time.Now()}
 	err = s.userRepository.Create(&user)
 	if err != nil {
 		return nil, err
@@ -56,12 +56,12 @@ func (s *UserService) Register(user_reg *entity.UserRegister) (*entity.UserInfo,
 	return info, err
 }
 
-func (s *UserService) Login(user_log *entity.UserLogin) (*entity.UserInfo, error) {
-	user, err := s.userRepository.GetByLogin(user_log.Login)
+func (s *UserService) Login(userLog *entity.UserLogin) (*entity.UserInfo, error) {
+	user, err := s.userRepository.GetByLogin(userLog.Login)
 	if err != nil {
 		return nil, err
 	}
-	err = helpers.ComparePasswordWithHash(user_log.Password, user.Password)
+	err = helpers.ComparePasswordWithHash(userLog.Password, user.Password)
 	if err != nil {
 		return nil, err
 	}

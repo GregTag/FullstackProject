@@ -10,9 +10,9 @@ import (
 	"gorm.io/gorm"
 )
 
-func NewSQLiteDB(db_path string) (*gorm.DB, error) {
+func NewSQLiteDB(dbPath string) (*gorm.DB, error) {
 	db, err := gorm.Open(
-		sqlite.Open(db_path),
+		sqlite.Open(dbPath),
 		&gorm.Config{},
 	)
 	if err != nil {

@@ -26,14 +26,14 @@ type MediaTrackView struct {
 type MediaTrackRepository interface {
 	Create(*MediaTrack) error
 	Update(*MediaTrack) error
-	Delete(user_id uint, media_id uint) error
-	Get(user_id uint, media_id uint) (*MediaTrack, error)
-	LoadAll(user_id uint) (*[]MediaTrackView, error)
+	Delete(userID, mediaID uint) error
+	Get(userID, mediaID uint) (*MediaTrack, error)
+	LoadAll(userID uint) (*[]MediaTrackView, error)
 }
 
 type MediaTrackService interface {
 	Track(*MediaTrackBase) error
 	Change(*MediaTrackBase) error
-	Untrack(user_id uint, media_id uint) error
-	LoadAll(user_id uint) (*[]MediaTrackView, error)
+	Untrack(userID uint, mediaID uint) error
+	LoadAll(userID uint) (*[]MediaTrackView, error)
 }

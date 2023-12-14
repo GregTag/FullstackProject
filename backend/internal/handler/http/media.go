@@ -31,7 +31,7 @@ func (h *Handler) mediaLoad(w http.ResponseWriter, r *http.Request) {
 	jsend.Success(w, media, http.StatusOK)
 }
 
-func parseMedia(w http.ResponseWriter, r *http.Request, media *entity.Media, allow_id bool) bool {
+func parseMedia(w http.ResponseWriter, r *http.Request, media *entity.Media, allowID bool) bool {
 	var data entity.MediaBase
 	if parseBody(w, r, &data) != nil {
 		return false

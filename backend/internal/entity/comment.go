@@ -24,14 +24,14 @@ type CommentView struct {
 type CommentRepository interface {
 	Create(*Comment) error
 	Update(*Comment) error
-	Delete(id, sender_id uint) error
-	Load(id, sender_id uint) (*CommentView, error)
-	LoadAll(media_id uint) (*[]CommentView, error)
+	Delete(id, senderID uint) error
+	Load(id, senderID uint) (*CommentView, error)
+	LoadAll(mediaID uint) (*[]CommentView, error)
 }
 
 type CommentService interface {
 	Add(*CommentBase) (*CommentView, error)
 	Edit(*CommentBase) (*CommentView, error)
-	Delete(id, sender_id uint) error
-	LoadAll(media_id uint) (*[]CommentView, error)
+	Delete(id, senderID uint) error
+	LoadAll(mediaID uint) (*[]CommentView, error)
 }

@@ -38,8 +38,8 @@ func (r *CommentSQLite) Update(comment *entity.Comment) error {
 	return nil
 }
 
-func (r *CommentSQLite) Delete(id, sender_id uint) error {
-	result := r.db.Model(&entity.Comment{}).Where("id = ? AND sender_id = ?", id, sender_id).Delete(&entity.Comment{})
+func (r *CommentSQLite) Delete(id, senderID uint) error {
+	result := r.db.Model(&entity.Comment{}).Where("id = ? AND sender_id = ?", id, senderID).Delete(&entity.Comment{})
 	if result.Error != nil {
 		return result.Error
 	}
@@ -49,10 +49,10 @@ func (r *CommentSQLite) Delete(id, sender_id uint) error {
 	return nil
 }
 
-func (r *CommentSQLite) Load(id, sender_id uint) (*entity.CommentView, error) {
+func (r *CommentSQLite) Load(id, senderID uint) (*entity.CommentView, error) {
 	var comment entity.CommentView
 
-	result := r.db.Model(&entity.Comment{}).Where("id = ? AND sender_id = ?", id, sender_id).First(&comment)
+	result := r.db.Model(&entity.Comment{}).Where("id = ? AND sender_id = ?", id, senderID).First(&comment)
 	if result.Error == nil {
 		return &comment, nil
 	} else if errors.Is(result.Error, gorm.ErrRecordNotFound) {
@@ -62,10 +62,10 @@ func (r *CommentSQLite) Load(id, sender_id uint) (*entity.CommentView, error) {
 	}
 }
 
-func (r *CommentSQLite) LoadAll(media_id uint) (*[]entity.CommentView, error) {
+func (r *CommentSQLite) LoadAll(mediaID uint) (*[]entity.CommentView, error) {
 	var comments []entity.CommentView
 
-	result := r.db.Model(&entity.Comment{}).Where("media_id = ?", media_id).Find(&comments)
+	result := r.db.Model(&entity.Comment{}).Where("media_id = ?", mediaID).Find(&comments)
 	if result.Error != nil {
 		return nil, result.Error
 	} else {

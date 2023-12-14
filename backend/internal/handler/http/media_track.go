@@ -24,7 +24,7 @@ func validateTrack(w http.ResponseWriter, track *entity.MediaTrackBase) bool {
 }
 
 func (h *Handler) trackAdd(w http.ResponseWriter, r *http.Request) {
-	user_id, verified := h.checkAuth(w, r)
+	userID, verified := h.checkAuth(w, r)
 	if !verified {
 		return
 	}
@@ -37,7 +37,7 @@ func (h *Handler) trackAdd(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	track.UserID = user_id
+	track.UserID = userID
 
 	err := h.mediaTrackService.Track(&track)
 	switch {
@@ -54,7 +54,7 @@ func (h *Handler) trackAdd(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) trackEdit(w http.ResponseWriter, r *http.Request) {
-	user_id, verified := h.checkAuth(w, r)
+	userID, verified := h.checkAuth(w, r)
 	if !verified {
 		return
 	}
@@ -67,7 +67,7 @@ func (h *Handler) trackEdit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	track.UserID = user_id
+	track.UserID = userID
 
 	err := h.mediaTrackService.Change(&track)
 	switch {
@@ -84,17 +84,17 @@ func (h *Handler) trackEdit(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) trackDelete(w http.ResponseWriter, r *http.Request) {
-	user_id, verified := h.checkAuth(w, r)
+	userID, verified := h.checkAuth(w, r)
 	if !verified {
 		return
 	}
 
-	media_id, exists := getIdParam(w, r)
+	mediaID, exists := getIdParam(w, r)
 	if !exists {
 		return
 	}
 
-	err := h.mediaTrackService.Untrack(user_id, media_id)
+	err := h.mediaTrackService.Untrack(userID, mediaID)
 	switch {
 	case errors.Is(err, entity.ErrMediaTrackNotFound):
 		jsend.Error(w, err.Error(), http.StatusNotFound)
