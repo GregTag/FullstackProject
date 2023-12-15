@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "json-server": "^0.17.4"
-  },
-  "scripts": {
-    "start": "json-server --watch db.json --routes routes.json"
-  }
-}

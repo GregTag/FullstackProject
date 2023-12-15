@@ -1129,6 +1129,8 @@ components:
           type: "string"
         media_title:
           type: "string"
+        media_category:
+          type: "string"
     Filter:
       type: "object"
       properties:

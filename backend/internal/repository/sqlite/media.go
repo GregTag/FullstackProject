@@ -79,7 +79,11 @@ func (r *MediaSQLite) Load(id uint) (*entity.MediaView, error) {
 	}
 	comments, err := NewCommentSQLite(r.db).LoadAll(id)
 	if err != nil {
-		return nil, err
+		if errors.Is(err, entity.ErrCommentNotFound) {
+			comments = &[]entity.CommentView{}
+		} else {
+			return nil, err
+		}
 	}
 
 	return &entity.MediaView{Media: *media, Comments: *comments}, nil
@@ -112,10 +116,10 @@ func (r *MediaSQLite) Search(filter *entity.Filter) (*[]entity.MediaResult, erro
 		query = query.Where("duration <= ?", filter.DurationTo)
 	}
 	if filter.RatingFrom != 0 {
-		query = query.Where("cumulative_rating >= number_of_votes * ?", filter.RatingFrom)
+		query = query.Where("cumulative_rating >= number_of_ratings * ?", filter.RatingFrom)
 	}
 	if filter.RatingTo != 0 {
-		query = query.Where("cumulative_rating <= number_of_votes * ?", filter.RatingTo)
+		query = query.Where("cumulative_rating <= number_of_ratings * ?", filter.RatingTo)
 	}
 
 	err := query.Select("id, title, image, cumulative_rating / number_of_ratings AS rating").Scan(&results).Error

@@ -15,7 +15,7 @@ func validateTrack(w http.ResponseWriter, track *entity.MediaTrackBase) bool {
 		return false
 	}
 
-	if !entity.TrackStatuses.Contains(track.TrackStatus) {
+	if track.TrackStatus != "" && !entity.TrackStatuses.Contains(track.TrackStatus) {
 		jsend.Error(w, "Invalid track status", http.StatusBadRequest)
 		return false
 	}

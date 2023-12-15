@@ -1,12 +1,11 @@
-import config from '../config/config.json';
 import { redirect } from 'react-router-dom';
 import { applySelector } from './slices/store';
 import { selectCurrentUser } from './slices/user';
+import { mediaApi, userApi } from './api';
 
 export async function loadMedia({ params }) {
-    return fetch(`${config.api_base_url}/api/media/${params.name}`, {
-        method: 'GET',
-    }).then((res) => res.json());
+    const response = await mediaApi.mediaLoadIdGet(params.id);
+    return response.data.data;
 }
 
 export async function loadProfile({ params }) {
@@ -18,13 +17,6 @@ export async function loadProfile({ params }) {
             return redirect('/auth');
         }
     }
-    return fetch(`${config.api_base_url}/api/users/${params.name}`, {
-        method: 'GET',
-    }).then((res) => res.json()).then((res) => res ? res[0] : null);
-}
-
-export async function loadComments(media) {
-    return fetch(`${config.api_base_url}/api/comments/${media}`, {
-        method: 'GET',
-    }).then((res) => res.json());
+    const response = await userApi.userLoadLoginGet(params.name);
+    return response.data.data;
 }

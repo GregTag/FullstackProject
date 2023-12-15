@@ -23,7 +23,7 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
         children: [
             { path: '/', element: <HomePage />, errorElement: <ErrorPage /> },
-            { path: '/media/:name?', loader: loadMedia, action: actionComment, element: <MediaPage />, errorElement: <ErrorPage /> },
+            { path: '/media/:id', loader: loadMedia, action: actionComment, element: <MediaPage />, errorElement: <ErrorPage /> },
             { path: '/profile/:name?', loader: loadProfile, element: <ProfilePage />, errorElement: <ErrorPage /> },
             { path: '/search', loader: actionSearch, action: actionSearch, element: <SearchPage />, errorElement: <ErrorPage /> }
         ]

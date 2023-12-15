@@ -1,7 +1,0 @@
-{
-    "/api/*": "/$1",
-    "/comments/:media": "/comments?media_id=:media",
-    "/users/:login": "/users?login=:login",
-    "/signin": "/users",
-    "/signup": "/users"
-}

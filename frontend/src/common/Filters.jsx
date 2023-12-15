@@ -18,22 +18,20 @@ function FilterAccordion({ title, children }) {
 }
 
 function CategoryRadio({ value }) {
-    const lower = value.toLowerCase();
     return (
         <ListItem>
-            <Radio value={lower} label={value} />
+            <Radio value={value} label={value} />
         </ListItem>
     );
 }
 
 function GenreCheckbox({ value, filter }) {
     const dispatch = useDispatch();
-    const lower = value.toLowerCase();
-    const handler = (event) => dispatch(setFilterAndFetch({ filter: 'genres', value: event.target.checked ? filter.concat(lower) : filter.filter((val) => val !== lower) }));
+    const handler = (event) => dispatch(setFilterAndFetch({ filter: 'genres', value: event.target.checked ? filter.concat(value) : filter.filter((val) => val !== value) }));
 
     return (
         <ListItem sx={{ mr: '0px' }}>
-            <Checkbox value={value} label={value} disableIcon overlay size="sm" checked={filter.includes(lower)} onChange={handler} />
+            <Checkbox value={value} label={value} disableIcon overlay size="sm" checked={filter.includes(value)} onChange={handler} />
         </ListItem>
     );
 }

@@ -20,7 +20,8 @@ type MediaTrack struct {
 
 type MediaTrackView struct {
 	MediaTrackBase
-	MediaTitle string `json:"media_title"`
+	MediaTitle    string `json:"media_title"`
+	MediaCategory string `json:"media_category"`
 }
 
 type MediaTrackRepository interface {

@@ -12,7 +12,7 @@ function MediaPage() {
         <Sheet sx={{ mx: { sm: 0, md: 25 }, p: '20px', flexGrow: 1 }}>
             <Stack spacing={2}>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                    <Box sx={{ flexBasis: 300 }}>
+                    <Box sx={{ flexBasis: 300, flexShrink: 0 }}>
                         <AspectRatio ratio={1 / 1} >
                             <img src={media.image} alt={media.title} />
                         </AspectRatio>
@@ -22,12 +22,12 @@ function MediaPage() {
                         <Divider />
                         <Typography>{media.description}</Typography>
                         <Stack direction="row" spacing={2}>
-                            <Rating rating={media.rating} media_id={media.id} />
+                            <Rating media={media} />
                             <StatusMenu media_id={media.id} />
                         </Stack>
                     </Stack>
                 </Stack>
-                <Comments media={media.id} />
+                <Comments comments={media.comments} media_id={media.id} />
             </Stack>
         </Sheet>
     );

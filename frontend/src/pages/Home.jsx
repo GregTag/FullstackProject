@@ -7,8 +7,7 @@ import mediaAttributes from '../config/media_attributes.json';
 
 function SearchButton({ to, category }) {
     const dispatch = useDispatch();
-    const lower = category.toLowerCase();
-    const handler = () => dispatch(setFilter({ filter: 'category', value: lower }));
+    const handler = () => dispatch(setFilter({ filter: 'category', value: category }));
     return (
         <Button component={RouterLink} to={to} size='lg' onClick={handler}>{category}</Button>
     );

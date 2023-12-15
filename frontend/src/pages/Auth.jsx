@@ -5,6 +5,7 @@ import { Stack, Link, Card, FormControl, Input, Button, Typography, Alert, FormL
 function LoginForm({ onRegister }) {
     return (
         <Form action='/auth' method='POST'>
+            <input type='hidden' name='action' value='login' />
             <FormControl>
                 <FormLabel>Username:</FormLabel>
                 <Input type='text' name='username' />
@@ -24,9 +25,18 @@ function LoginForm({ onRegister }) {
 function RegisterForm({ onGoBack }) {
     return (
         <Form action='/auth' method='POST'>
+            <input type='hidden' name='action' value='register' />
             <FormControl>
                 <FormLabel htmlFor='username'>Username:</FormLabel>
                 <Input type='text' name='username' />
+            </FormControl>
+            <FormControl>
+                <FormLabel htmlFor='fullname'>Full Name:</FormLabel>
+                <Input type='text' name='fullname' />
+            </FormControl>
+            <FormControl>
+                <FormLabel htmlFor='password'>Email:</FormLabel>
+                <Input type='email' name='email' />
             </FormControl>
             <FormControl>
                 <FormLabel htmlFor='password'>Password:</FormLabel>

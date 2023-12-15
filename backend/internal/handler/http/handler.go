@@ -34,25 +34,39 @@ func NewHandler(s *service.Service, auth *auth.AuthManager) *Handler {
 func (h *Handler) NewRouter() *mux.Router {
 	r := mux.NewRouter()
 
-	r.HandleFunc("/user/register", h.userRegister).Methods("POST")
-	r.HandleFunc("/user/login", h.userLogin).Methods("POST")
-	r.HandleFunc("/user/logout", h.userLogout).Methods("POST")
-	r.HandleFunc("/user/edit", h.userEdit).Methods("PUT")
-	r.HandleFunc("/user/load/{login}", h.userLoad).Methods("GET")
+	// For debug purposes
+	r.Use(func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+			w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+			w.Header().Set("Access-Control-Expose-Headers", "Authorization")
+			if r.Method == "OPTIONS" {
+				return
+			}
+			next.ServeHTTP(w, r)
+		})
+	})
 
-	r.HandleFunc("/media/load/{id}", h.mediaLoad).Methods("GET")
-	r.HandleFunc("/media/add", h.mediaAdd).Methods("POST")
-	r.HandleFunc("/media/edit", h.mediaEdit).Methods("PUT")
-	r.HandleFunc("/media/delete/{id}", h.mediaDelete).Methods("DELETE")
-	r.HandleFunc("/search", h.search).Methods("POST")
+	r.HandleFunc("/user/register", h.userRegister).Methods("POST", "OPTIONS")
+	r.HandleFunc("/user/login", h.userLogin).Methods("POST", "OPTIONS")
+	r.HandleFunc("/user/logout", h.userLogout).Methods("POST", "OPTIONS")
+	r.HandleFunc("/user/edit", h.userEdit).Methods("PUT", "OPTIONS")
+	r.HandleFunc("/user/load/{login}", h.userLoad).Methods("GET", "OPTIONS")
 
-	r.HandleFunc("/comment/add", h.commentAdd).Methods("POST")
-	r.HandleFunc("/comment/edit", h.commentEdit).Methods("PUT")
-	r.HandleFunc("/comment/delete/{id}", h.commentDelete).Methods("DELETE")
+	r.HandleFunc("/media/load/{id}", h.mediaLoad).Methods("GET", "OPTIONS")
+	r.HandleFunc("/media/add", h.mediaAdd).Methods("POST", "OPTIONS")
+	r.HandleFunc("/media/edit", h.mediaEdit).Methods("PUT", "OPTIONS")
+	r.HandleFunc("/media/delete/{id}", h.mediaDelete).Methods("DELETE", "OPTIONS")
+	r.HandleFunc("/search", h.search).Methods("POST", "OPTIONS")
 
-	r.HandleFunc("/track/add", h.trackAdd).Methods("POST")
-	r.HandleFunc("/track/edit", h.trackEdit).Methods("PUT")
-	r.HandleFunc("/track/delete/{id}", h.trackDelete).Methods("DELETE")
+	r.HandleFunc("/comment/add", h.commentAdd).Methods("POST", "OPTIONS")
+	r.HandleFunc("/comment/edit", h.commentEdit).Methods("PUT", "OPTIONS")
+	r.HandleFunc("/comment/delete/{id}", h.commentDelete).Methods("DELETE", "OPTIONS")
+
+	r.HandleFunc("/track/add", h.trackAdd).Methods("POST", "OPTIONS")
+	r.HandleFunc("/track/edit", h.trackEdit).Methods("PUT", "OPTIONS")
+	r.HandleFunc("/track/delete/{id}", h.trackDelete).Methods("DELETE", "OPTIONS")
 
 	return r
 }

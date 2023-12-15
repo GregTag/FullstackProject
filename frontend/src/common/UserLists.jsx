@@ -9,7 +9,7 @@ const categories = mediaAttributes.category.values;
 
 const head = [
     {
-        id: 'title',
+        id: 'media_title',
         label: 'Title'
     },
     {
@@ -24,16 +24,16 @@ const head = [
 
 const options = [5, 10, 25, 50, 100];
 
-function MediaTable({ category, profile }) {
-    const rows = Object.entries(profile.media).filter(([, val]) => val.category === category).map(([id, { status, ...other }]) => ({ id, status: mapStatus(status), ...other }));
+function MediaTable({ category, tracks }) {
+    const rows = Object.entries(tracks).filter(([, val]) => val.media_category === category).map(([id, { track_status, ...other }]) => ({ id, status: mapStatus(track_status), ...other }));
     const navigate = useNavigate();
-    const handler = (event, row) => navigate(`/media/${row.id}`);
+    const handler = (event, row) => navigate(`/media/${row.media_id}`);
     return (
         <TableWithSort head={head} rowsPerPageOptions={options} rows={rows} handleClick={handler} />
     );
 }
 
-function UserLists({ profile }) {
+function UserLists({ tracks }) {
     return (
         <Tabs color="primary" variant="outlined" defaultValue={categories[0]} sx={{
             borderRadius: 'lg',
@@ -48,7 +48,7 @@ function UserLists({ profile }) {
 
             {categories.map((category) => (
                 <TabPanel key={category} value={category} sx={{ p: 0 }}>
-                    <MediaTable category={category} profile={profile} />
+                    <MediaTable category={category} tracks={tracks} />
                 </TabPanel>
             ))}
         </Tabs>

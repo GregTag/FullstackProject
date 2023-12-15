@@ -4,6 +4,7 @@ import (
 	"backend/internal/entity"
 	"database/sql"
 	"errors"
+	"log"
 
 	"gorm.io/gorm"
 )
@@ -141,7 +142,8 @@ func getImpl(db *gorm.DB, userID uint, mediaID uint) (*entity.MediaTrack, error)
 func (r *MediaTrackSQLite) LoadAll(userID uint) (*[]entity.MediaTrackView, error) {
 	var tracks []entity.MediaTrackView
 
-	result := r.db.Table("media_tracks").Select("media_tracks.*, media.title as media_title").Joins("JOIN media ON media_tracks.media_id = media.id").Where("media_tracks.user_id = ?", userID).Scan(&tracks)
+	result := r.db.Table("media_tracks").Select("media_tracks.*, media.title as media_title, media.category as media_category").Joins("JOIN media ON media_tracks.media_id = media.id").Where("media_tracks.user_id = ?", userID).Scan(&tracks)
+	log.Println("LoadAll", tracks)
 	if result.Error != nil {
 		return nil, result.Error
 	} else {

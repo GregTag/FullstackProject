@@ -4,8 +4,10 @@ import (
 	"backend/internal/entity"
 	repository_sqlite "backend/internal/repository/sqlite"
 	"errors"
+	"log"
 	"testing"
 
+	"github.com/jinzhu/copier"
 	"github.com/stretchr/testify/suite"
 	"gorm.io/gorm"
 )
@@ -137,6 +139,14 @@ func (suite *CommentTestSuite) TestDelete_NotFound() {
 	suite.Equal(entity.ErrCommentNotFound, err)
 }
 func (suite *CommentTestSuite) TestLoad() {
+	// Create a user for testing
+	user := entity.User{ID: 1, UserRegister: entity.UserRegister{UserLogin: entity.UserLogin{Login: "test 1"}, Fullname: "Test 1", Email: "test1"}}
+	result := suite.db.Create(&user)
+	suite.NoError(result.Error)
+	view := entity.UserView{}
+	err := copier.Copy(&view, &user)
+	suite.NoError(err)
+
 	// Create a new comment
 	comment := &entity.Comment{CommentBase: entity.CommentBase{
 		MediaID:  1,
@@ -144,11 +154,13 @@ func (suite *CommentTestSuite) TestLoad() {
 		Content:  "Test Comment",
 	},
 	}
-	err := suite.repo.Create(comment)
+	err = suite.repo.Create(comment)
 	suite.NoError(err)
 
 	// Call the Load method to retrieve the comment
 	loadedComment, err := suite.repo.Load(comment.ID, comment.SenderID)
+	loadedComment.Sender.CreatedAt = loadedComment.Sender.CreatedAt.Local()
+	log.Println(loadedComment)
 	suite.NoError(err)
 
 	// Assert that the loaded comment is not nil
@@ -159,6 +171,7 @@ func (suite *CommentTestSuite) TestLoad() {
 	suite.Equal(comment.MediaID, loadedComment.MediaID)
 	suite.Equal(comment.SenderID, loadedComment.SenderID)
 	suite.Equal(comment.Content, loadedComment.Content)
+	suite.Equal(view, loadedComment.Sender)
 }
 
 func (suite *CommentTestSuite) TestLoad_NotFound() {
@@ -170,10 +183,16 @@ func (suite *CommentTestSuite) TestLoad_NotFound() {
 	suite.Nil(loadedComment)
 }
 func (suite *CommentTestSuite) TestLoadAll() {
+	// Create a user for testing
+	result := suite.db.Create(&entity.User{ID: 2, UserRegister: entity.UserRegister{UserLogin: entity.UserLogin{Login: "test 2"}, Fullname: "Test 2", Email: "test2"}})
+	suite.NoError(result.Error)
+	result = suite.db.Create(&entity.User{ID: 3, UserRegister: entity.UserRegister{UserLogin: entity.UserLogin{Login: "test 3"}, Fullname: "Test 3", Email: "test3"}})
+	suite.NoError(result.Error)
+
 	// Create comments for testing
 	comments := []entity.Comment{
 		{CommentBase: entity.CommentBase{MediaID: 2, SenderID: 2, Content: "Test Comment 1"}},
-		{CommentBase: entity.CommentBase{MediaID: 2, SenderID: 1, Content: "Test Comment 2"}},
+		{CommentBase: entity.CommentBase{MediaID: 2, SenderID: 3, Content: "Test Comment 2"}},
 		{CommentBase: entity.CommentBase{MediaID: 1, SenderID: 2, Content: "Test Comment 3"}},
 	}
 	for _, comment := range comments {

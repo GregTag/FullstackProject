@@ -13,19 +13,19 @@ type MediaBase struct {
 	Category    string        `json:"category"`
 	ReleaseYear uint32        `json:"release_year"`
 	Duration    time.Duration `json:"duration"`
-	Genres      []Genre       `gorm:"foreignKey:MediaID"`
+	Genres      []Genre       `gorm:"foreignKey:MediaID" json:"genres"`
 }
 
 type Media struct {
 	MediaBase
-	CumulativeRating int32
-	NumberOfRatings  uint32
-	NumberOfTracks   uint32
+	CumulativeRating int32  `json:"cumulative_rating"`
+	NumberOfRatings  uint32 `json:"number_of_ratings"`
+	NumberOfTracks   uint32 `json:"number_of_tracks"`
 }
 
 type MediaView struct {
 	Media
-	Comments []CommentView
+	Comments []CommentView `json:"comments"`
 }
 
 type MediaResult struct {
