@@ -17,9 +17,12 @@
 * [React Router](https://reactrouter.com/)
 * [Redux Persist](https://github.com/rt2zz/redux-persist#readme)
 * [Joy-UI](https://mui.com/joy-ui/getting-started/)
+* [Axios](https://axios-http.com/)
+* [OpenAPI Generator](https://openapi-generator.tech/)
 
 ## Backend
-Запустите `go run cmd/app/main.go` в папке `backend`. Приложение должно запуститься на `localhost:8000`.
+* Запустите `./key.sh` в папке `backend` для генерации ключа для JWT.
+* Запустите `go run cmd/app/main.go` в папке `backend`. Приложение должно запуститься на `localhost:8000`.
 
 ### Технологии
 * [Golang](https://golang.org/)
