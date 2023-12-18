@@ -8,6 +8,7 @@ import (
 	"backend/pkg/auth"
 	"context"
 	"flag"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -18,6 +19,14 @@ import (
 var wait = time.Second * 15
 
 func main() {
+	logFile, err := os.OpenFile("./log/backend.log", os.O_CREATE|os.O_APPEND|os.O_RDWR, 0666)
+	if err != nil {
+		log.Panicf("Error opening file: %s\n", err.Error())
+	}
+	defer logFile.Close()
+	mw := io.MultiWriter(os.Stdout, logFile)
+	log.SetOutput(mw)
+
 	dbPath := flag.String("db", "umo.db", "Path to SQLite database")
 	jwtKeyPath := flag.String("jwt", "jwt.key", "Path to JWT key")
 	flag.Parse()

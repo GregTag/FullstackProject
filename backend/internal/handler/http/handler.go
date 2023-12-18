@@ -34,39 +34,44 @@ func NewHandler(s *service.Service, auth *auth.AuthManager) *Handler {
 func (h *Handler) NewRouter() *mux.Router {
 	r := mux.NewRouter()
 
-	// For debug purposes
+	r.Use(mux.CORSMethodMiddleware(r))
 	r.Use(func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Access-Control-Allow-Origin", "*")
-			w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 			w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 			w.Header().Set("Access-Control-Expose-Headers", "Authorization")
-			if r.Method == "OPTIONS" {
+			if r.Method == http.MethodOptions {
 				return
 			}
 			next.ServeHTTP(w, r)
 		})
 	})
+	r.Use(func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			log.Printf("Method: %s, URL: %s, RemoteAddr: %s\n", r.Method, r.URL, r.RemoteAddr)
+			next.ServeHTTP(w, r)
+		})
+	})
 
-	r.HandleFunc("/user/register", h.userRegister).Methods("POST", "OPTIONS")
-	r.HandleFunc("/user/login", h.userLogin).Methods("POST", "OPTIONS")
-	r.HandleFunc("/user/logout", h.userLogout).Methods("POST", "OPTIONS")
-	r.HandleFunc("/user/edit", h.userEdit).Methods("PUT", "OPTIONS")
-	r.HandleFunc("/user/load/{login}", h.userLoad).Methods("GET", "OPTIONS")
+	r.HandleFunc("/user/register", h.userRegister).Methods(http.MethodPost, http.MethodOptions)
+	r.HandleFunc("/user/login", h.userLogin).Methods(http.MethodPost, http.MethodOptions)
+	r.HandleFunc("/user/logout", h.userLogout).Methods(http.MethodPost, http.MethodOptions)
+	r.HandleFunc("/user/edit", h.userEdit).Methods(http.MethodPut, http.MethodOptions)
+	r.HandleFunc("/user/load/{login}", h.userLoad).Methods(http.MethodGet, http.MethodOptions)
 
-	r.HandleFunc("/media/load/{id}", h.mediaLoad).Methods("GET", "OPTIONS")
-	r.HandleFunc("/media/add", h.mediaAdd).Methods("POST", "OPTIONS")
-	r.HandleFunc("/media/edit", h.mediaEdit).Methods("PUT", "OPTIONS")
-	r.HandleFunc("/media/delete/{id}", h.mediaDelete).Methods("DELETE", "OPTIONS")
-	r.HandleFunc("/search", h.search).Methods("POST", "OPTIONS")
+	r.HandleFunc("/media/load/{id}", h.mediaLoad).Methods(http.MethodGet, http.MethodOptions)
+	r.HandleFunc("/media/add", h.mediaAdd).Methods(http.MethodPost, http.MethodOptions)
+	r.HandleFunc("/media/edit", h.mediaEdit).Methods(http.MethodPut, http.MethodOptions)
+	r.HandleFunc("/media/delete/{id}", h.mediaDelete).Methods(http.MethodDelete, http.MethodOptions)
+	r.HandleFunc("/search", h.search).Methods(http.MethodPost, http.MethodOptions)
 
-	r.HandleFunc("/comment/add", h.commentAdd).Methods("POST", "OPTIONS")
-	r.HandleFunc("/comment/edit", h.commentEdit).Methods("PUT", "OPTIONS")
-	r.HandleFunc("/comment/delete/{id}", h.commentDelete).Methods("DELETE", "OPTIONS")
+	r.HandleFunc("/comment/add", h.commentAdd).Methods(http.MethodPost, http.MethodOptions)
+	r.HandleFunc("/comment/edit", h.commentEdit).Methods(http.MethodPut, http.MethodOptions)
+	r.HandleFunc("/comment/delete/{id}", h.commentDelete).Methods(http.MethodDelete, http.MethodOptions)
 
-	r.HandleFunc("/track/add", h.trackAdd).Methods("POST", "OPTIONS")
-	r.HandleFunc("/track/edit", h.trackEdit).Methods("PUT", "OPTIONS")
-	r.HandleFunc("/track/delete/{id}", h.trackDelete).Methods("DELETE", "OPTIONS")
+	r.HandleFunc("/track/add", h.trackAdd).Methods(http.MethodPost, http.MethodOptions)
+	r.HandleFunc("/track/edit", h.trackEdit).Methods(http.MethodPut, http.MethodOptions)
+	r.HandleFunc("/track/delete/{id}", h.trackDelete).Methods(http.MethodDelete, http.MethodOptions)
 
 	return r
 }

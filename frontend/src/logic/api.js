@@ -25,8 +25,8 @@ axios.interceptors.response.use((response) => {
 });
 
 const config = new Configuration({
-    // basePath: window.location.origin,
-    basePath: 'http://localhost:8000',
+    basePath: window.location.origin + '/api',
+    // basePath: 'http://localhost:8000',
 });
 
 export const userApi = new UserApi(config, config.basePath, axios);
