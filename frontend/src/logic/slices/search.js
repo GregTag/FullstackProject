@@ -84,6 +84,7 @@ export const setSearchTermAndFetch = (params) => async (dispatch) => {
 
 export const selectResults = (state) => state.search.results;
 export const selectFilters = (state) => state.search.filters;
+export const selectSearchTerm = (state) => state.search.filters.searchTerm;
 export const selectStatus = (state) => state.search.status;
 export const selectError = (state) => state.search.error;
 export const { setSearchTerm, setFilter, setResults } = searchSlice.actions;

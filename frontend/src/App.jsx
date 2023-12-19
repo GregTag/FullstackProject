@@ -13,7 +13,7 @@ import ProfilePage from './pages/Profile';
 import SearchPage from './pages/Search';
 import ErrorPage from './pages/Error';
 import AuthPage from './pages/Auth';
-import { loadMedia, loadProfile } from './logic/loaders';
+import { loadMedia, loadProfile, loadSearch } from './logic/loaders';
 import { actionAuth, actionComment, actionSearch } from './logic/actions';
 
 const router = createBrowserRouter([
@@ -25,7 +25,7 @@ const router = createBrowserRouter([
             { path: '/', element: <HomePage />, errorElement: <ErrorPage /> },
             { path: '/media/:id', loader: loadMedia, action: actionComment, element: <MediaPage />, errorElement: <ErrorPage /> },
             { path: '/profile/:name?', loader: loadProfile, element: <ProfilePage />, errorElement: <ErrorPage /> },
-            { path: '/search', loader: actionSearch, action: actionSearch, element: <SearchPage />, errorElement: <ErrorPage /> }
+            { path: '/search', loader: loadSearch, action: actionSearch, element: <SearchPage />, errorElement: <ErrorPage /> }
         ]
     },
     { path: '/auth', action: actionAuth, element: <AuthPage />, errorElement: <AuthPage /> }

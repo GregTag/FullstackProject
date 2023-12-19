@@ -3,9 +3,11 @@ import { Form, Link as RouterLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsLoggedIn, logout } from '../logic/slices/user';
 import { Sheet, Box, Typography, Input, Button, Link, FormControl, Stack } from '@mui/joy';
+import { selectSearchTerm } from '../logic/slices/search';
 
 function Header() {
     const is_logged = useSelector(selectIsLoggedIn);
+    const searchTerm = useSelector(selectSearchTerm);
     const dispatch = useDispatch();
     return (
         <Sheet component="header" variant='soft' sx={{ p: 2 }}>
@@ -16,7 +18,7 @@ function Header() {
                     </Typography>
                 </Link>
                 <FormControl sx={{ flexGrow: 1 }} size="lg" color="neutral" component={Form} action="/search" method="post">
-                    <Input name='query' placeholder="Search..." variant="outlined" endDecorator={
+                    <Input name='query' placeholder="Search..." defaultValue={searchTerm} variant="outlined" endDecorator={
                         <Button size="lg" type="submit" color="neutral" variant="soft">Search</Button>
                     } />
                 </FormControl>

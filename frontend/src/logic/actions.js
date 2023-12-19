@@ -1,7 +1,7 @@
 import { login } from './slices/user';
 import { json, redirect } from 'react-router-dom';
 import { dispatch } from './slices/store';
-import { fetchSearchResults } from './slices/search';
+import { setSearchTermAndFetch } from './slices/search';
 import { commentApi, userApi } from './api';
 
 
@@ -53,7 +53,9 @@ export async function actionComment({ request }) {
     return {};
 }
 
-export async function actionSearch() {
-    dispatch(fetchSearchResults());
+export async function actionSearch({ request }) {
+    const data = await request.formData();
+    const query = data.get('query');
+    dispatch(setSearchTermAndFetch(query));
     return {};
 }

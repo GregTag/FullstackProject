@@ -2,6 +2,8 @@ import { redirect } from 'react-router-dom';
 import { applySelector } from './slices/store';
 import { selectCurrentUser } from './slices/user';
 import { mediaApi, userApi } from './api';
+import { dispatch } from './slices/store';
+import { fetchSearchResults } from './slices/search';
 
 export async function loadMedia({ params }) {
     const response = await mediaApi.mediaLoadIdGet(params.id);
@@ -19,4 +21,9 @@ export async function loadProfile({ params }) {
     }
     const response = await userApi.userLoadLoginGet(params.name);
     return response.data.data;
+}
+
+export async function loadSearch() {
+    dispatch(fetchSearchResults());
+    return {};
 }
